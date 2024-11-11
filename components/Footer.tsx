@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         {/* Terms */}
-        <div className="flex flex-col sm:flex-row items-center">
+        <div className="flex gap-10">
           <a href="#" className="text-gray-400 hover:text-white">
             Terms & Conditions
           </a>
@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <span className="">
+        <span>
           {new Date().getFullYear()} © All rights reserved
         </span>
       </div>

@@ -25,7 +25,7 @@ const content = [
         Analysez vos performances avec des statistiques avancées
       </div>
     ),
-  },  
+  },
   {
     title: "Création de grilles de session",
     description:
@@ -35,7 +35,7 @@ const content = [
         Conception de grilles de session sur mesure
       </div>
     ),
-  },  
+  },
   {
     title: "Assistant IA (bientôt disponible)",
     description:
@@ -45,17 +45,18 @@ const content = [
         Bénéficiez de l'aide d'un assistant IA pour vos sessions (à venir)
       </div>
     ),
-  },  
+  },
 ];
 
 export default function Home() {
   return (
     <>
-      <section className="bg-gray-900">
+      {/* HERO SECTION */}
+      <section className="bg-gray-900 scroll-mt-12">
         <GridBackground>
           <div className="flex flex-col items-center">
             <div className="flex-center flex-col gap-12">
-              <h1 className="font-bold text-5xl sm:text-7xl text-center text-gray-200">
+              <h1 className="font-bold text-5xl sm:text-7xl leading-[46px] text-center text-gray-200 drop-shadow-sm">
                 Maîtrisez vos <span className="text-blue-600">tournois.</span>
                 <br />
                 <span className="text-blue-600">Optimisez</span> vos gains.
@@ -64,22 +65,58 @@ export default function Home() {
                 <RegisterLink>Essayer gratuitement</RegisterLink>
               </Button>
             </div>
-            <ChevronDown
-              strokeWidth={3}
-              width={60}
-              height={60}
-              className="absolute bottom-1 text-gray-200 cursor-pointer hover:translate-y-2"
-            />
+            <a
+              href="#solutions"
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
+            >
+              <ChevronDown
+                strokeWidth={3.5}
+                width={70}
+                height={70}
+                className="text-gray-200 cursor-pointer hover:translate-y-2 transition ease-in"
+              />
+            </a>
           </div>
         </GridBackground>
       </section>
 
-      <section className="h-[85vh] bg-blue-950 flex items-center justify-evenly flex-col">
-        <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">Découvrez nos solutions pour les grinders</h2>
+      {/* SOLUTIONS SECTION */}
+      <section
+        id="solutions"
+        className="h-[90vh] bg-blue-950 flex items-center justify-evenly flex-col scroll-mt-12"
+      >
+        <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
+          Découvrez nos solutions pour les grinders
+        </h2>
         <div>
           <StickyScroll content={content} />
         </div>
       </section>
+
+      {/* FEATURE SECTION */}
+      <section
+        id="feature"
+        className="relative bg-gray-900 h-[90vh] flex-center flex-col z-0 scroll-mt-12"
+      >
+        {/* Filters to background image */}
+        <div
+          className="absolute inset-0 h-full w-full bg-cover bg-center opacity-20 -z-10"
+          style={{ backgroundImage: "url('/img/bg-cards.png')" }}
+        />
+        <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
+          Créez vos propres grilles de session
+        </h2>
+        <Image src="/img/laptop.png" width={900} height={900} alt="laptop" />
+        <Button variant="elevated" size="lg">
+          <RegisterLink>Commencer maintenant</RegisterLink>
+        </Button>
+      </section>
+
+      {/* FAQ SECTION */}
+      <section
+        id="faq"
+        className="bg-blue-950 h-[90vh] flex items-center justify-evenly flex-col scroll-mt-12"
+      ></section>
     </>
   );
 }

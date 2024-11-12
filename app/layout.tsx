@@ -22,7 +22,7 @@ export default function RootLayout({
   
   return (
     <AuthProvider>
-      <html lang="en">
+      <html lang="en" className="scroll-smooth">
         <body className={roboto.className}>{children}</body>
       </html>
     </AuthProvider>

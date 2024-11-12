@@ -4,11 +4,32 @@ import {
   LoginLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 export default function NavbarActionButton() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["solutions", "feature", "faq"];
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+          }
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -92,20 +113,11 @@ export default function NavbarActionButton() {
                 <li role="none" className="flex items-stretch">
                   <a
                     role="menuitem"
-                    aria-haspopup="false"
-                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-blue-500 focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8"
-                    href="javascript:void(0)"
-                  >
-                    <span>Produit</span>
-                  </a>
-                </li>
-                <li role="none" className="flex items-stretch">
-                  <a
-                    role="menuitem"
-                    aria-current="page"
-                    aria-haspopup="false"
-                    className="flex items-center gap-2 py-4 transition-colors duration-300 text-blue-500 hover:text-blue-600 focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8"
-                    href="javascript:void(0)"
+                    aria-current={activeSection === "solutions" ? "page" : undefined}
+                    className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
+                      activeSection === "solutions" ? "text-blue-600" : "hover:text-blue-500"
+                    } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
+                    href="#solutions"
                   >
                     <span>Solutions</span>
                   </a>
@@ -113,9 +125,24 @@ export default function NavbarActionButton() {
                 <li role="none" className="flex items-stretch">
                   <a
                     role="menuitem"
+                    aria-current={activeSection === "feature" ? "page" : undefined}
+                    className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
+                      activeSection === "feature" ? "text-blue-600" : "hover:text-blue-500"
+                    } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
+                    href="#feature"
+                  >
+                    <span>Fonctionnalités</span>
+                  </a>
+                </li>
+                <li role="none" className="flex items-stretch">
+                  <a
+                    role="menuitem"
+                    aria-current={activeSection === "faq" ? "page" : undefined}
                     aria-haspopup="false"
-                    className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-blue-500 focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8"
-                    href="javascript:void(0)"
+                    className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
+                      activeSection === "faq" ? "text-blue-600" : "hover:text-blue-500"
+                    } lg:px-8`}
+                    href="#faq"
                   >
                     <span>FAQ</span>
                   </a>

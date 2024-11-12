@@ -1,3 +1,4 @@
+import { AccordionFAQ } from "@/components/AccordionFAQ";
 import { GridBackground } from "@/components/GridBackground";
 import { Button } from "@/components/ui/button";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
@@ -113,10 +114,18 @@ export default function Home() {
       </section>
 
       {/* FAQ SECTION */}
-      <section
-        id="faq"
-        className="bg-blue-950 h-[90vh] flex items-center justify-evenly flex-col scroll-mt-12"
-      ></section>
+      <section id="faq" className="bg-blue-950 h-[80vh] scroll-mt-12">
+        <div className="w-1/2 py-20">
+          <h2 className="text-center font-semibold text-3xl sm:text-5xl text-gray-200">
+            Vous avez des questions ?
+          </h2>
+        </div>
+
+        <div className="w-1/2 mx-auto">
+          <AccordionFAQ />
+        </div>
+
+      </section>
     </>
   );
 }

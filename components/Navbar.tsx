@@ -20,7 +20,10 @@ export default function NavbarActionButton() {
         const element = document.getElementById(section);
         if (element) {
           const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
             setActiveSection(section);
           }
         }
@@ -42,7 +45,12 @@ export default function NavbarActionButton() {
             role="navigation"
           >
             {/*      <!-- Brand logo --> */}
-            <span id="WindUI" aria-label="WindUI logo" aria-current="page" className="flex items-center gap-2 py-3">
+            <span
+              id="WindUI"
+              aria-label="WindUI logo"
+              aria-current="page"
+              className="flex items-center gap-2 py-3"
+            >
               <a
                 href="/"
                 className="flex items-center gap-2 py-3 text-lg whitespace-nowrap focus:outline-none lg:flex-1"
@@ -113,9 +121,13 @@ export default function NavbarActionButton() {
                 <li role="none" className="flex items-stretch">
                   <a
                     role="menuitem"
-                    aria-current={activeSection === "solutions" ? "page" : undefined}
+                    aria-current={
+                      activeSection === "solutions" ? "page" : undefined
+                    }
                     className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
-                      activeSection === "solutions" ? "text-blue-600" : "hover:text-blue-500"
+                      activeSection === "solutions"
+                        ? "text-blue-600"
+                        : "hover:text-blue-500"
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
                     href="#solutions"
                   >
@@ -125,9 +137,13 @@ export default function NavbarActionButton() {
                 <li role="none" className="flex items-stretch">
                   <a
                     role="menuitem"
-                    aria-current={activeSection === "feature" ? "page" : undefined}
+                    aria-current={
+                      activeSection === "feature" ? "page" : undefined
+                    }
                     className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
-                      activeSection === "feature" ? "text-blue-600" : "hover:text-blue-500"
+                      activeSection === "feature"
+                        ? "text-blue-600"
+                        : "hover:text-blue-500"
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
                     href="#feature"
                   >
@@ -140,7 +156,9 @@ export default function NavbarActionButton() {
                     aria-current={activeSection === "faq" ? "page" : undefined}
                     aria-haspopup="false"
                     className={`flex items-center gap-2 py-4 transition-colors duration-300 ${
-                      activeSection === "faq" ? "text-blue-600" : "hover:text-blue-500"
+                      activeSection === "faq"
+                        ? "text-blue-600"
+                        : "hover:text-blue-500"
                     } lg:px-8`}
                     href="#faq"
                   >

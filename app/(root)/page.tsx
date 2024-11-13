@@ -1,5 +1,6 @@
 import { AccordionFAQ } from "@/components/AccordionFAQ";
 import { GridBackground } from "@/components/GridBackground";
+import BlurIn from "@/components/ui/blur-in";
 import { Button } from "@/components/ui/button";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
@@ -57,24 +58,23 @@ export default function Home() {
         <GridBackground>
           <div className="flex flex-col items-center">
             <div className="flex-center flex-col gap-12">
-              <h1 className="font-bold text-5xl sm:text-7xl leading-[46px] text-center text-gray-200 drop-shadow-sm">
-                Maîtrisez vos <span className="text-blue-600">tournois.</span>
-                <br />
-                <span className="text-blue-600">Optimisez</span> vos gains.
-              </h1>
+              <BlurIn word="Maîtrisez vos" nextWord="tournois." />
+              <BlurIn prevWord="Optimisez" word="vos gains." />
+             
               <Button variant="elevated" size="lg">
                 <RegisterLink>Essayer gratuitement</RegisterLink>
               </Button>
             </div>
             <a
               href="#solutions"
+              aria-label="Scroll to solutions"
               className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
             >
               <ChevronDown
                 strokeWidth={3.5}
                 width={70}
-                height={70}
-                className="text-gray-200 cursor-pointer hover:translate-y-2 transition ease-in"
+                height={70}    
+                className="text-gray-200 cursor-pointer animate-bounce"
               />
             </a>
           </div>
@@ -101,13 +101,13 @@ export default function Home() {
       >
         {/* Filters to background image */}
         <div
-          className="absolute inset-0 h-full w-full bg-cover bg-center opacity-20 -z-10"
-          style={{ backgroundImage: "url('/img/bg-cards.png')" }}
+          className="absolute inset-0 h-full w-full bg-cover bg-center opacity-10 -z-10"
+          style={{ backgroundImage: "url('/img/bg-cards.webp')" }}
         />
         <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
           Créez vos propres grilles de session
         </h2>
-        <Image src="/img/laptop.png" width={900} height={900} alt="laptop" />
+        <Image src="/img/laptop.webp" width={900} height={900} alt="laptop" className="max-w-[900px]" />
         <Button variant="elevated" size="lg">
           <RegisterLink>Commencer maintenant</RegisterLink>
         </Button>
@@ -124,7 +124,6 @@ export default function Home() {
         <div className="w-1/2 mx-auto">
           <AccordionFAQ />
         </div>
-
       </section>
     </>
   );

@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between">
         {/* Social icons */}
         <div className="flex flex-col gap-4 sm:flex-row items-center">
-          <a href="#" className="text-gray-400 hover:text-white">
+          <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -20,7 +20,7 @@ export default function Footer() {
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
             </svg>
           </a>
-          <a href="#" className="ml-3 text-gray-400 hover:text-white">
+          <a href="#" aria-label="Instagram" className="ml-3 text-gray-400 hover:text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -38,7 +38,7 @@ export default function Footer() {
               <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
             </svg>
           </a>
-          <a href="#" className="ml-3 text-gray-400 hover:text-white">
+          <a href="#" aria-label="LinkedIn" className="ml-3 text-gray-400 hover:text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -60,10 +60,10 @@ export default function Footer() {
 
         {/* Terms */}
         <div className="flex gap-10">
-          <a href="#" className="text-gray-400 hover:text-white">
+          <a href="#" aria-label="Terms & Conditions" className="text-gray-400 hover:text-white">
             Terms & Conditions
           </a>
-          <a href="#" className="ml-3 text-gray-400 hover:text-white">
+          <a href="#" aria-label="Privacy" className="ml-3 text-gray-400 hover:text-white">
             Privacy Policy
           </a>
         </div>

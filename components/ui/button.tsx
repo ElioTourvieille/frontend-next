@@ -15,7 +15,7 @@ const buttonVariants = cva(
         outline:
           "border border-blue-500 text-blue-500 hover:border-blue-600 hover:text-blue-600 focus:border-blue-700 focus:text-blue-700 disabled:text-blue-300",
         elevated:
-          "bg-blue-600 text-gray-100 shadow-sm shadow-black hover:bg-blue-800 hover:shadow-md hover:shadow-black focus:bg-blue-700 focus:shadow-sm focus:shadow-blue-200 disabled:bg-blue-300",
+          "bg-blue-600 text-gray-100 shadow-sm shadow-black hover:bg-blue-800 hover:shadow-md hover:shadow-black focus:bg-blue-700 disabled:bg-blue-300",
       },
       size: {
         default: "h-10 px-6 py-2",

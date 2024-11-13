@@ -167,12 +167,13 @@ export default function NavbarActionButton() {
                 </li>
               </ul>
               <div className="flex items-center gap-4 px-6 ml-auto lg:ml-0 lg:p-0">
-                <Button variant="elevated">
-                  <LoginLink>Connexion</LoginLink>
-                </Button>
-                <Button variant="secondary">
-                  <RegisterLink>Inscription</RegisterLink>
-                </Button>
+                <LoginLink>
+                  <Button variant="elevated">Connexion</Button>
+                </LoginLink>
+
+                <RegisterLink>
+                  <Button variant="secondary">Inscription</Button>
+                </RegisterLink>
               </div>
             </div>
           </nav>

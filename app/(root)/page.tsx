@@ -57,13 +57,15 @@ export default function Home() {
       <section className="bg-gray-900 scroll-mt-12">
         <GridBackground>
           <div className="flex flex-col items-center">
-            <div className="flex-center flex-col gap-12">
+            <div className="flex-center flex-col gap-10">
               <BlurIn word="Maîtrisez vos" nextWord="tournois." />
               <BlurIn prevWord="Optimisez" word="vos gains." />
-             
-              <Button variant="elevated" size="lg">
-                <RegisterLink>Essayer gratuitement</RegisterLink>
-              </Button>
+
+              <RegisterLink>
+                <Button className="mt-10" variant="elevated" size="lg">
+                  Essayer gratuitement
+                </Button>
+              </RegisterLink>
             </div>
             <a
               href="#solutions"
@@ -73,7 +75,7 @@ export default function Home() {
               <ChevronDown
                 strokeWidth={3.5}
                 width={70}
-                height={70}    
+                height={70}
                 className="text-gray-200 cursor-pointer animate-bounce"
               />
             </a>
@@ -107,10 +109,19 @@ export default function Home() {
         <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
           Créez vos propres grilles de session
         </h2>
-        <Image src="/img/laptop.webp" width={900} height={900} alt="laptop" className="max-w-[900px]" />
-        <Button variant="elevated" size="lg">
-          <RegisterLink>Commencer maintenant</RegisterLink>
-        </Button>
+        <Image
+          src="/img/laptop.webp"
+          width={900}
+          height={900}
+          alt="laptop"
+          className="max-w-[900px]"
+        />
+
+        <RegisterLink>
+          <Button variant="elevated" size="lg">
+            Commencer maintenant
+          </Button>
+        </RegisterLink>
       </section>
 
       {/* FAQ SECTION */}

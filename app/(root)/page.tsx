@@ -6,6 +6,7 @@ import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ChevronDown } from "lucide-react";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 
 const content = [
@@ -55,10 +56,14 @@ export default async function Home() {
   const { isAuthenticated } = getKindeServerSession();
   const isAuthed = await isAuthenticated();
 
+  if (isAuthed) {
+    redirect("/user");
+  }
+
   return (
     <>
       {/* HERO SECTION */}
-      <section className="bg-gray-900 scroll-mt-12 h-[90vh]">
+      <section className="bg-gray-900 h-[90vh]">
         <GridBackground>
           <div className="flex flex-col items-center">
             <div className="flex-center flex-col gap-10">
@@ -90,7 +95,7 @@ export default async function Home() {
       {/* SOLUTIONS SECTION */}
       <section
         id="solutions"
-        className="h-screen bg-blue-950 flex items-center justify-evenly flex-col scroll-mt-12"
+        className="h-screen bg-blue-950 flex items-center justify-evenly flex-col"
       >
         <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
           Découvrez nos solutions pour les grinders
@@ -103,7 +108,7 @@ export default async function Home() {
       {/* FEATURE SECTION */}
       <section
         id="feature"
-        className="relative bg-gray-900 h-screen flex-center flex-col z-0 scroll-mt-12 py-10"
+        className="relative bg-gray-900 h-screen flex-center flex-col z-0 py-10"
       >
         {/* Filters to background image */}
         <div
@@ -129,7 +134,7 @@ export default async function Home() {
       </section>
 
       {/* FAQ SECTION */}
-      <section id="faq" className="bg-blue-950 h-[90vh] scroll-mt-12">
+      <section id="faq" className="bg-blue-950 h-[90vh]">
         <div className="w-1/2 py-20">
           <h2 className="text-center font-semibold text-3xl sm:text-5xl text-gray-200">
             Vous avez des questions ?

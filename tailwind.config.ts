@@ -21,7 +21,8 @@ const config: Config = {
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
 			},
 			fontFamily: {
-				roboto: ['var(--roboto-condensed)', 'sans-serif']
+				roboto: ['var(--roboto-condensed)', 'sans-serif'],
+				orbitron: ['Orbitron', 'sans-serif'],
 			},
 			colors: {
 				background: 'hsl(var(--background))',

@@ -21,7 +21,7 @@ const BlurIn = ({
   nextWord,
   className,
   variant,
-  duration = 1,
+  duration = 2,
 }: BlurIntProps) => {
   const defaultVariants = {
     hidden: { filter: "blur(10px)", opacity: 0 },
@@ -36,7 +36,7 @@ const BlurIn = ({
       transition={{ duration }}
       variants={combinedVariants}
       className={cn(
-        "font-bold text-6xl leading-[46px] text-center text-gray-200 drop-shadow-sm lg:text-8xl ",
+        "font-bold text-6xl leading-[46px] text-center text-gray-200 drop-shadow-2xl lg:text-8xl ",
         className
       )}
     >

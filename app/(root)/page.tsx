@@ -4,6 +4,7 @@ import BlurIn from "@/components/ui/blur-in";
 import { Button } from "@/components/ui/button";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
@@ -50,7 +51,10 @@ const content = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { isAuthenticated } = getKindeServerSession();
+  const isAuthed = await isAuthenticated();
+
   return (
     <>
       {/* HERO SECTION */}
@@ -139,3 +143,5 @@ export default function Home() {
     </>
   );
 }
+
+

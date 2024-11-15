@@ -1,16 +1,17 @@
 "use client";
 
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function AvatarRoundedBaseBorderText() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const navigationItems = [
     {
       linkName: "Compte",
-      href: "user/account",
+      href: "/user/account",
     },
     {
       linkName: "Abonnement",
@@ -22,7 +23,7 @@ export default function AvatarRoundedBaseBorderText() {
     },
     {
       linkName: "Déconnexion",
-      href: "#", // L'URL sera ignorée pour cet élément
+      href: "#",
     },
   ];
 
@@ -73,8 +74,25 @@ export default function AvatarRoundedBaseBorderText() {
     }
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <>
+    <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen ? "true" : "false"}
@@ -86,7 +104,7 @@ export default function AvatarRoundedBaseBorderText() {
       <ul
         className={`${
           isOpen ? "flex" : "hidden"
-        } absolute top-full right-10 z-10 mt-1 w-72 list-none flex-col rounded bg-gray-900 py-2 shadow-md shadow-slate-500/10 `}
+        } absolute top-full -right-2 z-10 mt-1 w-72 list-none flex-col rounded bg-gray-900 py-2 shadow-md shadow-slate-500/10 `}
       >
         {navigationItems.map((item, index) => {
           return (
@@ -97,7 +115,7 @@ export default function AvatarRoundedBaseBorderText() {
                     index === currentItem
                       ? "bg-gray-800 text-blue-500"
                       : "bg-none text-slate-500"
-                  } flex items-start justify-start gap-2 p-2 px-5 font-semibold transition-colors duration-300 hover:bg-gray-800 hover:text-blue-500 focus:bg-blue-300 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
+                  } flex items-start justify-start gap-2 p-2 px-5 font-semibold transition-colors duration-300 hover:bg-gray-800 hover:text-blue-500 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
                 >
                   <span className="flex flex-col gap-1 overflow-hidden whitespace-nowrap">
                     <span className="leading-5 truncate">{item.linkName}</span>
@@ -109,7 +127,7 @@ export default function AvatarRoundedBaseBorderText() {
                     index === currentItem
                       ? "bg-gray-800 text-blue-500"
                       : "bg-none text-slate-500"
-                  } flex items-start justify-start gap-2 p-2 px-5 font-semibold transition-colors duration-300 hover:bg-gray-800 hover:text-blue-500 focus:bg-blue-300 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
+                  } flex items-start justify-start gap-2 p-2 px-5 font-semibold transition-colors duration-300 hover:bg-gray-800 hover:text-blue-500 focus:text-blue-600 focus:outline-none focus-visible:outline-none`}
                   href={item.href}
                   aria-current={index === currentItem ? "page" : "false"}
                 >
@@ -122,6 +140,6 @@ export default function AvatarRoundedBaseBorderText() {
           );
         })}
       </ul>
-    </>
+    </div>
   );
 }

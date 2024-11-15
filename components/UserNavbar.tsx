@@ -50,7 +50,7 @@ export default function UserNavbar() {
               className="flex items-center gap-2 py-3"
             >
               <a
-                href="/"
+                href="/user"
                 className="flex items-center gap-4 py-3 text-lg whitespace-nowrap focus:outline-none lg:flex-1"
               >
                 <Image
@@ -90,7 +90,7 @@ export default function UserNavbar() {
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
                     href="#solutions"
                   >
-                    <span>Solutions</span>
+                    <span>Rechercher</span>
                   </a>
                 </li>
                 <li role="none" className="flex items-stretch">
@@ -106,7 +106,7 @@ export default function UserNavbar() {
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
                     href="#feature"
                   >
-                    <span>Fonctionnalités</span>
+                    <span>Mes Tableaux</span>
                   </a>
                 </li>
                 <li role="none" className="flex items-stretch">
@@ -121,7 +121,7 @@ export default function UserNavbar() {
                     } lg:px-8`}
                     href="#faq"
                   >
-                    <span>FAQ</span>
+                    <span>Abonnements</span>
                   </a>
                 </li>
               </ul>

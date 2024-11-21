@@ -46,7 +46,7 @@ const content = [
       "Notre assistant IA vous aidera bientôt à concevoir une grille de session adaptée à votre profil. Grâce à l'IA, optimisez vos choix de tournois selon votre niveau, votre ROI, votre volume de jeu et votre budget.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-600),var(--emerald-600))] flex items-center justify-center text-white text-center">
-        Bénéficiez de l'aide d'un assistant IA pour vos sessions (à venir)
+        Bénéficiez de l&apos;aide d&apos;un assistant IA pour vos sessions (à venir)
       </div>
     ),
   },

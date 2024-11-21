@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  LoginLink,
-  RegisterLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
 import React, { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import Image from "next/image";
 import logo from "../public/img/Logo.png";
-import Avatar from "./ui/avatar";
+import Avatar from "./avatar";
 
 export default function UserNavbar() {
-  const [isToggleOpen, setIsToggleOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
@@ -42,7 +36,6 @@ export default function UserNavbar() {
       <header className="sticky top-0 z-20 w-full border-b-2 shadow-lg border-gray-600 bg-gray-900 shadow-gray-700/5 after:absolute after:left-0 after:top-full after:z-10 after:block after:h-px after:w-full after:bg-slate-200 lg:backdrop-blur-sm lg:after:hidden">
         <div className="relative mx-auto max-w-full px-6 lg:max-w-6xl xl:max-w-9xl 2xl:max-w-[110rem]">
           <nav className="max-h-16 border border-transparent shadow-input flex items-center justify-between space-x-4 px-8 py-6 ">
-
             {/*      <!-- Brand logo --> */}
             <span
               id="Poker ProGrid"
@@ -71,11 +64,7 @@ export default function UserNavbar() {
               <ul
                 role="menubar"
                 aria-label="Select page"
-                className={`absolute left-0 top-0 z-[-1] h-[28.5rem] w-full justify-center overflow-hidden overflow-y-auto overscroll-contain bg-white/90 px-8 pb-12 pt-24 text-gray-200 font-medium transition-[opacity,visibility] duration-300 lg:visible lg:relative lg:top-0  lg:z-0 lg:flex lg:h-full lg:w-auto lg:items-stretch lg:overflow-visible lg:bg-white/0 lg:px-0 lg:py-0  lg:pt-0 lg:opacity-100 ${
-                  isToggleOpen
-                    ? "visible opacity-100 backdrop-blur-sm"
-                    : "invisible opacity-0"
-                }`}
+                className={`absolute left-0 top-0 z-[-1] h-[28.5rem] w-full justify-center overflow-hidden overflow-y-auto overscroll-contain bg-white/90 px-8 pb-12 pt-24 text-gray-200 font-medium transition-[opacity,visibility] duration-300 lg:visible lg:relative lg:top-0  lg:z-0 lg:flex lg:h-full lg:w-auto lg:items-stretch lg:overflow-visible lg:bg-white/0 lg:px-0 lg:py-0  lg:pt-0 lg:opacity-100`}
               >
                 <li role="none" className="flex items-stretch">
                   <a

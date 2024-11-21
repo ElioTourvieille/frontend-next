@@ -5,31 +5,24 @@ type Permission = (typeof ROLES)[Role][number]
 
 const ROLES = {
   elite: [
-    'admin.view',
-    'admin.edit',
-    'admin.delete',
-    'admin.add',
-    'admin.import',
-    'admin.export',
+    'tournament.view',
+    'tournament.edit',
+    'grid.create',
+    'grid.share',
+    'premium.filters.access',
   ],
   premium: [
-    'user.view',
-    'user.edit',
-    'user.delete',
-    'user.add',
-    'user.import',
-    'user.export',
+    'tournament.view',
+    'grid.create',
+    'premium.filters.access',
   ],
   free: [
-    'user.view',
-    'user.edit',
-    'user.delete',
-    'user.add',
+    'tournament.view',
   ],
 } as const;
 
-export function hasPermission(user: User, permission: Permission) {
-    return user.roles.some(role => 
-        (ROLES[role] as readonly Permission[]).includes(permission)
-    );
+export function hasPermission(user: User, permission: Permission): boolean {
+  return user.roles.some(role =>
+    (ROLES[role] as readonly Permission[]).includes(permission)
+  );
 }

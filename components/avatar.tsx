@@ -1,12 +1,16 @@
 "use client";
 
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function AvatarRoundedBaseBorderText() {
+export default function Avatar() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  
+  const {user} = useKindeBrowserClient();
+  const initials = `${user?.given_name?.charAt(0)?.toUpperCase() || ""}${user?.family_name?.charAt(0)?.toUpperCase() || ""}`;
 
   const navigationItems = [
     {
@@ -79,7 +83,8 @@ export default function AvatarRoundedBaseBorderText() {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
-      ) {
+      ) 
+      {
         setIsOpen(false);
       }
     }
@@ -98,7 +103,7 @@ export default function AvatarRoundedBaseBorderText() {
         aria-expanded={isOpen ? "true" : "false"}
         className="inline-flex items-center justify-center w-10 h-10 text-lg text-white border-2 border-white rounded bg-blue-500"
       >
-        ET
+        {initials}
       </button>
       {/*  <!-- Start Menu list --> */}
       <ul
@@ -143,3 +148,4 @@ export default function AvatarRoundedBaseBorderText() {
     </div>
   );
 }
+

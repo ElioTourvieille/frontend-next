@@ -11,7 +11,7 @@ import {
         <AccordionItem value="item-1">
           <AccordionTrigger className="text-xl font-semibold text-gray-200">Quels tournois sont disponibles sur la plateforme?</AccordionTrigger>
           <AccordionContent className="text-lg font-medium text-gray-300">
-            Les tournois disponibles sont ceux des principales rooms présentes en francophonie pour le moment. <p>Nous essayerons d&apos;ajouter de nouvelles rooms à l&apos;avenir pour les pays voisins. D'autres langues (English, Espanol) seront également ajoutées prochainement.</p>
+            Les tournois disponibles sont ceux des principales rooms présentes en francophonie pour le moment. <p>Nous essayerons d&apos;ajouter de nouvelles rooms à l&apos;avenir pour les pays voisins. D&apos;autres langues (English, Espanol) seront également ajoutées prochainement.</p>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
@@ -28,7 +28,7 @@ import {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
-          <AccordionTrigger className="text-xl font-semibold text-gray-200">J'ai d'autres questions, comment vous contacter?</AccordionTrigger>
+          <AccordionTrigger className="text-xl font-semibold text-gray-200">J&apos;ai d&apos;autres questions, comment vous contacter?</AccordionTrigger>
           <AccordionContent className="text-lg font-medium text-gray-300">
             La meilleure façon de nous contacter est par email à <span className="text-blue-600">support@pokerprogrid.com</span> ou directement via nos réseaux sociaux.
           </AccordionContent>

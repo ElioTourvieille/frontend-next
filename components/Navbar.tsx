@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import logo from "../public/img/Logo.png";
+import Link from "next/link";
 
 export default function NavbarActionButton() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
@@ -52,7 +53,7 @@ export default function NavbarActionButton() {
               aria-current="page"
               className="flex items-center gap-2 py-3"
             >
-              <a
+              <Link
                 href="/"
                 className="flex items-center gap-4 py-3 text-lg whitespace-nowrap focus:outline-none lg:flex-1"
               >
@@ -64,7 +65,7 @@ export default function NavbarActionButton() {
                 <h2 className="text-2xl font-orbitron font-extrabold bg-gradient-to-r from-white to-blue-500 text-transparent bg-clip-text">
                   Poker ProGrid
                 </h2>
-              </a>
+              </Link>
             </span>
             {/*      <!-- Mobile trigger --> */}
             <button

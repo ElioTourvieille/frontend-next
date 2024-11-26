@@ -7,7 +7,9 @@ import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ChevronDown } from "lucide-react";
 import { redirect } from "next/navigation";
-import Image from "next/image";
+import AnimatedTitle from "@/components/AnimatedTitle";
+import LaptopMotion from "@/components/LaptopMotion";
+import BackgroundAnimation from "@/components/BackgroundAnimation";
 
 const content = [
   {
@@ -46,7 +48,8 @@ const content = [
       "Notre assistant IA vous aidera bientôt à concevoir une grille de session adaptée à votre profil. Grâce à l'IA, optimisez vos choix de tournois selon votre niveau, votre ROI, votre volume de jeu et votre budget.",
     content: (
       <div className="h-full w-full bg-[linear-gradient(to_bottom_right,var(--cyan-600),var(--emerald-600))] flex items-center justify-center text-white text-center">
-        Bénéficiez de l&apos;aide d&apos;un assistant IA pour vos sessions (à venir)
+        Bénéficiez de l&apos;aide d&apos;un assistant IA pour vos sessions (à
+        venir)
       </div>
     ),
   },
@@ -97,9 +100,11 @@ export default async function Home() {
         id="solutions"
         className="h-screen bg-blue-950 flex items-center justify-evenly flex-col"
       >
-        <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
-          Découvrez nos solutions pour les grinders
-        </h2>
+        <AnimatedTitle
+          title="Découvrez nos solutions pour les grinders"
+          containerClass="mt-5 text-center"
+        />
+
         <div>
           <StickyScroll content={content} />
         </div>
@@ -110,21 +115,15 @@ export default async function Home() {
         id="feature"
         className="relative bg-gray-900 h-screen flex-center flex-col z-0 py-10"
       >
-        {/* Filters to background image */}
-        <div
-          className="absolute inset-0 h-full w-full bg-cover bg-center opacity-10 -z-10"
-          style={{ backgroundImage: "url('/img/bg-cards.webp')" }}
+
+        <BackgroundAnimation />
+
+        <AnimatedTitle
+          title="Créez vos propres grilles de session"
+          containerClass="mt-5 text-center"
         />
-        <h2 className="font-semibold text-3xl sm:text-5xl text-center text-gray-200">
-          Créez vos propres grilles de session
-        </h2>
-        <Image
-          src="/img/laptop.webp"
-          width={900}
-          height={900}
-          alt="laptop"
-          className="max-w-[700px] 2xl:max-w-[800px]"
-        />
+
+        <LaptopMotion />
 
         <RegisterLink>
           <Button variant="elevated" size="lg">
@@ -136,9 +135,10 @@ export default async function Home() {
       {/* FAQ SECTION */}
       <section id="faq" className="bg-blue-950 h-[90vh]">
         <div className="w-1/2 py-20">
-          <h2 className="text-center font-semibold text-3xl sm:text-5xl text-gray-200">
-            Vous avez des questions ?
-          </h2>
+          <AnimatedTitle
+            title="Vous avez des questions ?"
+            containerClass="mt-5 text-center"
+          />
         </div>
 
         <div className="w-1/2 mx-auto">
@@ -148,5 +148,3 @@ export default async function Home() {
     </>
   );
 }
-
-

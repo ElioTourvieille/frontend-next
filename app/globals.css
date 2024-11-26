@@ -49,9 +49,7 @@
   ::-webkit-scrollbar-thumb:hover {
     background-color: #718096; /* Couleur du pouce au survol */
   }
-  html {
-    scroll-behavior: smooth;
-  }
+
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
@@ -108,6 +106,17 @@
 
   .section_container {
     @apply px-6 py-10 max-w-7xl mx-auto;
+  }
+
+  .animated-title {
+    @apply font-semibold text-3xl sm:text-5xl text-center text-gray-200;
+  }
+
+  .animated-word {
+    @apply font-black opacity-0;
+    transform: translate3d(10px, 51px, -60px) rotateY(60deg) rotateX(-40deg);
+    transform-origin: 50% 50% -150px !important;
+    will-change: opacity, transform;
   }
   
 }

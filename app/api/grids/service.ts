@@ -1,3 +1,5 @@
+import { CreateGridData } from "@/app/types/grid";
+
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
 
 export const GridService = {
@@ -38,7 +40,7 @@ export const GridService = {
   },
 
   // Create a new grid
-  async createGrid(gridData: any) {
+  async createGrid(gridData: CreateGridData) {
     try {
       const response = await fetch(`${BACKEND_URL}/grids`, {
         method: 'POST',

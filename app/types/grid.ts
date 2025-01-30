@@ -14,4 +14,9 @@ export interface Grid {
   tournaments: Tournament[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface CreateGridData {
+  name: string;
+  tournaments: Tournament[];
 } 

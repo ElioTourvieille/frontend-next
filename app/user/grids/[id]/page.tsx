@@ -1,15 +1,20 @@
 import { GridService } from '@/app/api/grids/service';
 import { Tournament } from '@/app/types/grid';
 import { formatDate } from '@/lib/utils';
+import { Metadata } from 'next';
 
-type PageProps = {
+interface Props {
   params: {
     id: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function GridDetailPage({ params }: PageProps) {
+export const metadata: Metadata = {
+  title: 'Détails de la grille',
+  description: 'Détails et tournois de la grille',
+};
+
+export default async function GridDetailPage({ params }: Props) {
   try {
     const grid = await GridService.getGridById(params.id);
     

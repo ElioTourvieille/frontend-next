@@ -2,7 +2,14 @@ import { GridService } from '@/app/api/grids/service';
 import { Grid, Tournament } from '@/app/types/grid';
 import { formatDate } from '@/lib/utils';
 
-export default async function GridDetailPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default async function GridDetailPage({ params, searchParams }: PageProps) {
   try {
     const grid = await GridService.getGridById(params.id);
     

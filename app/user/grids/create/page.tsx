@@ -25,7 +25,7 @@ export default function CreateGridPage() {
     try {
       await GridService.createGrid(formData);
       router.push('/user/grids');
-    } catch (error) {
+    } catch {
       setError('Une erreur est survenue lors de la création de la grille');
     }
   };

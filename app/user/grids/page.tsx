@@ -46,7 +46,7 @@ export default async function GridsPage() {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="p-8 text-center text-red-500">
         Une erreur est survenue lors du chargement des grilles.

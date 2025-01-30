@@ -45,12 +45,12 @@ export default function SearchPage() {
       setError('');
       
       const validFilters = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== '')
+        Object.entries(filters).filter(([ value]) => value !== '')
       );
       
       const results = await TournamentService.searchTournaments(validFilters);
       setTournaments(results);
-    } catch (error) {
+    } catch {
       setError('Erreur lors de la recherche');
     } finally {
       setLoading(false);
@@ -64,7 +64,7 @@ export default function SearchPage() {
       await GridService.addTournamentToGrid(gridId, tournamentId);
       // Feedback visuel
       alert('Tournoi ajouté à la grille avec succès !');
-    } catch (error) {
+    } catch {
       setError('Erreur lors de l\'ajout du tournoi à la grille');
     } finally {
       setLoading(false);

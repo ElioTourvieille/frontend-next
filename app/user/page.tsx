@@ -1,6 +1,5 @@
 import React from 'react';
 import AnimatedTitle from '@/components/AnimatedTitle';
-import Image from 'next/image';
 import { Trophy, Users, TrendingUp, Calendar } from 'lucide-react';
 
 interface StatsCardProps {
@@ -19,10 +18,10 @@ interface QuickActionCardProps {
   icon: React.ReactNode;
 }
 
-interface SponsorLogoProps {
-  name: string;
-  path: string;
-}
+// interface SponsorLogoProps {
+//   name: string;
+//   path: string;
+// }
 
 interface NewsCardProps {
   title: string;

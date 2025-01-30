@@ -1,5 +1,5 @@
 import { GridService } from '@/app/api/grids/service';
-import { Grid, Tournament } from '@/app/types/grid';
+import { Tournament } from '@/app/types/grid';
 import { formatDate } from '@/lib/utils';
 
 type PageProps = {
@@ -9,7 +9,7 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function GridDetailPage({ params, searchParams }: PageProps) {
+export default async function GridDetailPage({ params }: PageProps) {
   try {
     const grid = await GridService.getGridById(params.id);
     
@@ -69,7 +69,7 @@ export default async function GridDetailPage({ params, searchParams }: PageProps
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="p-8 text-center text-red-500">
         Une erreur est survenue lors du chargement de la grille.

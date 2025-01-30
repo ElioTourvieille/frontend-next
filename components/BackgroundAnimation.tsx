@@ -17,7 +17,7 @@ const BackgroundAnimation = () => {
         ease: "power2.out",
         scrollTrigger: {
           trigger: ".background-image",
-          start: "top+=200 center", // Animation commence au milieu de l'élément
+          start: "top+=200 center",
           end: "bottom center", 
           scrub: true,
         },

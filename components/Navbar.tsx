@@ -46,7 +46,7 @@ export default function NavbarActionButton() {
             className="flex h-[5.5rem] justify-between font-medium text-gray-200"
             role="navigation"
           >
-            {/*      <!-- Brand logo --> */}
+            {/*  <!-- Brand logo --> */}
             <span
               id="Poker ProGrid"
               aria-label="Poker ProGrid logo"

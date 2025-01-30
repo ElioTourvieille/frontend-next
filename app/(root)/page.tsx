@@ -11,6 +11,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import LaptopMotion from "@/components/LaptopMotion";
 import BackgroundAnimation from "@/components/BackgroundAnimation";
 
+// Sticky scroll content
 const content = [
   {
     title: "Filtres personnalisés",

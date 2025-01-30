@@ -18,7 +18,7 @@ export function AccordionFAQ() {
   useEffect(() => {
     const items = accordionRef.current?.querySelectorAll(".accordion-item");
 
-    // Animation GSAP pour chaque item
+    // GSAP animation for each item
     items?.forEach((item) => {
       gsap.fromTo(
         item,

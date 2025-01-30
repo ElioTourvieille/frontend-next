@@ -36,7 +36,7 @@ export default function UserNavbar() {
       <header className="sticky top-0 z-20 w-full border-b-2 shadow-lg border-gray-600 bg-gray-900 shadow-gray-700/5 after:absolute after:left-0 after:top-full after:z-10 after:block after:h-px after:w-full after:bg-slate-200 lg:backdrop-blur-sm lg:after:hidden">
         <div className="relative mx-auto max-w-full px-6 lg:max-w-6xl xl:max-w-9xl 2xl:max-w-[110rem]">
           <nav className="max-h-16 border border-transparent shadow-input flex items-center justify-between space-x-4 px-8 py-6 ">
-            {/*      <!-- Brand logo --> */}
+            {/*  <!-- Brand logo --> */}
             <span
               id="Poker ProGrid"
               aria-label="Poker ProGrid logo"
@@ -59,7 +59,7 @@ export default function UserNavbar() {
               </a>
             </span>
 
-            {/*      <!-- Navigation links --> */}
+            {/*  <!-- Navigation links --> */}
             <div className="flex items-center gap-4 py-3">
               <ul
                 role="menubar"
@@ -77,7 +77,7 @@ export default function UserNavbar() {
                         ? "text-blue-600"
                         : "hover:text-blue-500"
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
-                    href="#solutions"
+                    href="/search"
                   >
                     <span>Rechercher</span>
                   </a>
@@ -93,7 +93,7 @@ export default function UserNavbar() {
                         ? "text-blue-600"
                         : "hover:text-blue-500"
                     } focus:text-blue-600 focus:outline-none focus-visible:outline-none lg:px-8`}
-                    href="#feature"
+                    href="/tables"
                   >
                     <span>Mes Tableaux</span>
                   </a>
@@ -108,7 +108,7 @@ export default function UserNavbar() {
                         ? "text-blue-600"
                         : "hover:text-blue-500"
                     } lg:px-8`}
-                    href="#faq"
+                    href="/subscriptions"
                   >
                     <span>Abonnements</span>
                   </a>

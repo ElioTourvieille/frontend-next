@@ -11,7 +11,8 @@ export default function SearchPage() {
   const [grids, setGrids] = useState<Grid[]>([]);
   const [selectedGrid, setSelectedGrid] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [noData, setNoData] = useState(false);
 
   const [filters, setFilters] = useState({
     room: '',
@@ -25,32 +26,65 @@ export default function SearchPage() {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        setNoData(false);
+
+        // Retrieve access token from server-side route API
+        const authResponse = await fetch('/api/auth');
+        if (!authResponse.ok) {
+          throw new Error('Failed to fetch access token');
+        }
+        const { accessToken } = await authResponse.json();
+
         const [userGrids, allTournaments] = await Promise.all([
-          GridService.getAllGrids(),
-          TournamentService.getAllTournaments()
+          GridService.getAllGrids(accessToken),
+          TournamentService.getAllTournaments(),
         ]);
-        setGrids(userGrids);
-        setTournaments(allTournaments);
+
+        if (!userGrids || !allTournaments) {
+          setNoData(true);
+        }
+
+        setGrids(userGrids || []);
+        setTournaments(allTournaments || []);
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
+        console.error('Erreur:', error);
         setError('Erreur lors du chargement des données');
+      } finally {
+        setLoading(false);
       }
     };
+
     loadInitialData();
   }, []);
 
   const handleSearch = async () => {
     try {
       setLoading(true);
-      setError('');
-      
+      setError(null);
+      setNoData(false);
+
       const validFilters = Object.fromEntries(
-        Object.entries(filters).filter(([ value]) => value !== '')
+        Object.entries(filters).filter(([_, value]) => value !== ''),
       );
-      
-      const results = await TournamentService.searchTournaments(validFilters);
-      setTournaments(results);
-    } catch {
+
+      const results = await TournamentService.searchTournaments({
+        room: filters.room,
+        minBuyIn: filters.minBuyIn ? Number(filters.minBuyIn) : undefined,
+        maxBuyIn: filters.maxBuyIn ? Number(filters.maxBuyIn) : undefined,
+        format: filters.format,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      });
+
+      if (!results || results.length === 0) {
+        setNoData(true);
+      }
+
+      setTournaments(results || []);
+    } catch (error) {
+      console.error('Erreur:', error);
       setError('Erreur lors de la recherche');
     } finally {
       setLoading(false);
@@ -60,11 +94,18 @@ export default function SearchPage() {
   const handleAddToGrid = async (tournamentId: number, gridId: number) => {
     try {
       setLoading(true);
-      setError('');
-      await GridService.addTournamentToGrid(gridId, tournamentId);
-      // Feedback visuel
+      setError(null);
+
+      const authResponse = await fetch('/api/auth');
+      if (!authResponse.ok) {
+        throw new Error('Failed to fetch access token');
+      }
+      const { accessToken } = await authResponse.json();
+
+      await GridService.addTournamentToGrid(gridId, tournamentId, accessToken);
       alert('Tournoi ajouté à la grille avec succès !');
-    } catch {
+    } catch (error) {
+      console.error('Erreur:', error);
       setError('Erreur lors de l\'ajout du tournoi à la grille');
     } finally {
       setLoading(false);
@@ -77,6 +118,7 @@ export default function SearchPage() {
 
       <div className="mb-6 p-4 bg-gray-800/30 rounded-lg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Filtres */}
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-1">Room</label>
             <select
@@ -159,62 +201,70 @@ export default function SearchPage() {
         </div>
       </div>
 
+      {/* Error display */}
       {error && (
         <div className="mb-4 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-500">
           {error}
         </div>
       )}
 
+      {/* Data display */}
       <div className="bg-gray-800/30 rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-800">
-            <tr>
-              <th className="px-4 py-3 text-left text-gray-200">Tournoi</th>
-              <th className="px-4 py-3 text-left text-gray-200">Room</th>
-              <th className="px-4 py-3 text-left text-gray-200">Buy-in</th>
-              <th className="px-4 py-3 text-left text-gray-200">Format</th>
-              <th className="px-4 py-3 text-left text-gray-200">Début</th>
-              <th className="px-4 py-3 text-left text-gray-200">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700">
-            {tournaments.map((tournament) => (
-              <tr key={tournament.id} className="hover:bg-gray-800/50">
-                <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
-                <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
-                <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
-                <td className="px-4 py-3 text-gray-300">{tournament.format}</td>
-                <td className="px-4 py-3 text-gray-300">
-                  {formatDate(tournament.startTime)}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <select
-                      className="bg-gray-700 text-gray-200 rounded px-2 py-1 text-sm"
-                      onChange={(e) => setSelectedGrid(Number(e.target.value))}
-                      value={selectedGrid || ''}
-                    >
-                      <option value="">Sélectionner une grille</option>
-                      {grids.map((grid) => (
-                        <option key={grid.id} value={grid.id}>
-                          {grid.name}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      onClick={() => selectedGrid && handleAddToGrid(tournament.id, selectedGrid)}
-                      disabled={!selectedGrid || loading}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 
-                               text-white rounded-lg text-sm transition-colors"
-                    >
-                      {loading ? 'Ajout...' : 'Ajouter'}
-                    </button>
-                  </div>
-                </td>
+      {loading ? (
+        <div className="p-8 text-center text-gray-400">Chargement en cours...</div>
+      ) : noData || tournaments.length === 0 ? (
+        <div className="p-8 text-center text-gray-400">Aucun tournoi disponible pour le moment.</div>
+        ) : (
+          <table className="w-full">
+            <thead className="bg-gray-800">
+              <tr>
+                <th className="px-4 py-3 text-left text-gray-200">Tournoi</th>
+                <th className="px-4 py-3 text-left text-gray-200">Room</th>
+                <th className="px-4 py-3 text-left text-gray-200">Buy-in</th>
+                <th className="px-4 py-3 text-left text-gray-200">Format</th>
+                <th className="px-4 py-3 text-left text-gray-200">Début</th>
+                <th className="px-4 py-3 text-left text-gray-200">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-700">
+              {tournaments.map((tournament) => (
+                <tr key={tournament.id} className="hover:bg-gray-800/50">
+                  <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.format}</td>
+                  <td className="px-4 py-3 text-gray-300">
+                    {formatDate(tournament.startTime)}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <select
+                        className="bg-gray-700 text-gray-200 rounded px-2 py-1 text-sm"
+                        onChange={(e) => setSelectedGrid(Number(e.target.value))}
+                        value={selectedGrid || ''}
+                      >
+                        <option value="">Sélectionner une grille</option>
+                        {grids.map((grid) => (
+                          <option key={grid.id} value={grid.id}>
+                            {grid.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => selectedGrid && handleAddToGrid(tournament.id, selectedGrid)}
+                        disabled={!selectedGrid || loading}
+                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 
+                                 text-white rounded-lg text-sm transition-colors"
+                      >
+                        {loading ? 'Ajout...' : 'Ajouter'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

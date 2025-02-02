@@ -4,30 +4,49 @@ export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backe
 
 export const GridService = {
   // Get all grids
-  async getAllGrids() {
+  async getAllGrids(accessToken : string) {
     try {
-      const response = await fetch(`${BACKEND_URL}/grids`, {
+      const response = await fetch(`${BACKEND_URL}/grid`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         },
       });
-      
-      if (!response.ok) throw new Error('Erreur lors de la récupération des grilles');
-      return await response.json();
+
+      if (response.status === 401) {
+        throw new Error('Non autorisé. Veuillez vous reconnecter.');
+      }
+
+      // If the answer is not OK, raise an error
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Check that the answer is a table
+      if (!Array.isArray(data)) {
+        console.warn("La réponse de l'API n'est pas un tableau:", data);
+        return [];
+      }
+
+      return data;
     } catch (error) {
-      console.error('Erreur:', error);
-      throw error;
+      console.error('Erreur lors de la récupération des grilles:', error);
+      // Return an empty array on error
+      return [];
     }
   },
 
   // Get a grid by its ID
-  async getGridById(id: string) {
+  async getGridById(id: string, token: string) {
     try {
-      const response = await fetch(`${BACKEND_URL}/grids/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/grid/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -40,12 +59,13 @@ export const GridService = {
   },
 
   // Create a new grid
-  async createGrid(gridData: CreateGridData) {
+  async createGrid(gridData: CreateGridData, token: string) {
     try {
-      const response = await fetch(`${BACKEND_URL}/grids`, {
+      const response = await fetch(`${BACKEND_URL}/grid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(gridData),
       });
@@ -59,12 +79,13 @@ export const GridService = {
   },
 
   // Add a tournament to a grid
-  async addTournamentToGrid(gridId: number, tournamentId: number) {
+  async addTournamentToGrid(gridId: number, tournamentId: number, token: string) {
     try {
-      const response = await fetch(`${BACKEND_URL}/grids/${gridId}/add-tournament`, {
+      const response = await fetch(`${BACKEND_URL}/grid/${gridId}/add-tournament`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ tournamentId }),
       });

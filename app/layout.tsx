@@ -29,20 +29,20 @@ export default async function RootLayout({
     <AuthProvider>
       <html lang="en" className="scroll-smooth">
         <body className={`${roboto.className} bg-[#0A0F1C] min-h-screen`}>
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 to-purple-900/10" />
-            <Image
-              src="/img/bg-icons.png"
-              alt="Background Pattern"
-              fill
-              className="object-cover opacity-[0.08]"
-              priority
-            />
-          </div>
-          <div className="relative z-1">
-            {isAuthed && <UserNavbar />}
-            {children}
-          </div>
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 to-purple-900/10" />
+              <Image
+                src="/img/bg-icons.png"
+                alt="Background Pattern"
+                fill
+                className="object-cover opacity-[0.08]"
+                priority
+              />
+            </div>
+            <div className="relative z-1">
+              {isAuthed && <UserNavbar />}
+              {children}
+            </div>
         </body>
       </html>
     </AuthProvider>

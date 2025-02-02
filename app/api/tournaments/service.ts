@@ -1,25 +1,17 @@
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
 
 export const TournamentService = {
-  // Récupérer tous les tournois
   async getAllTournaments() {
     try {
-      const response = await fetch(`${BACKEND_URL}/tournaments`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      if (!response.ok) throw new Error('Erreur lors de la récupération des tournois');
-      return await response.json();
+      // Use searchTournaments without filters to retrieve all tournaments
+      const results = await this.searchTournaments({});
+      return results.data || [];
     } catch (error) {
-      console.error('Erreur:', error);
-      throw error;
+      console.error('Erreur lors de la récupération des tournois:', error);
+      return [];
     }
   },
 
-  // Rechercher des tournois avec des filtres
   async searchTournaments(filters: {
     room?: string;
     minBuyIn?: number;
@@ -31,7 +23,9 @@ export const TournamentService = {
     try {
       const queryParams = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
-        if (value) queryParams.append(key, value.toString());
+        if (value !== undefined && value !== '') {
+          queryParams.append(key, value.toString());
+        }
       });
 
       const response = await fetch(`${BACKEND_URL}/tournaments/search?${queryParams}`, {
@@ -41,11 +35,15 @@ export const TournamentService = {
         },
       });
 
-      if (!response.ok) throw new Error('Erreur lors de la recherche des tournois');
-      return await response.json();
+      if (!response.ok) {
+        throw new Error('Erreur lors de la recherche des tournois');
+      }
+
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error('Erreur:', error);
-      throw error;
+      return { data: [], meta: {} };
     }
-  }
-}; 
+  },
+};

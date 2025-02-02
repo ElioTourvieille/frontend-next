@@ -17,6 +17,8 @@ export const TournamentService = {
     minBuyIn?: number;
     maxBuyIn?: number;
     format?: string;
+    variant?: string;
+    type?: string;
     startDate?: string;
     endDate?: string;
   }) {

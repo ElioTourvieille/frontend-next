@@ -42,14 +42,14 @@ export default async function GridsPage() {
           Veuillez réessayer plus tard.
         </div>
       ) : grids.length === 0 ? (
-        // Affichage lorsqu'il n'y a pas de grilles
+        // Display when there are no grids
         <div className="p-8 text-center text-gray-400 bg-gray-800/50 rounded-lg border border-gray-700">
-          Vous n'avez pas encore créé de grille de tournois.
+          Vous n&apos;avez pas encore créé de grille de tournois.
           <br />
           Commencez par en créer une !
         </div>
       ) : (
-        // Affichage des grilles
+        // Grid display
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {grids.map((grid: Grid) => (
             <Link

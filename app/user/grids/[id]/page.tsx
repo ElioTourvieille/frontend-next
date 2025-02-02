@@ -1,22 +1,18 @@
 import { GridService } from '@/app/api/grids/service';
 import { Tournament } from '@/app/types/grid';
 import { formatDate } from '@/lib/utils';
-import { Metadata } from 'next';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
+export default async function GridDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+    const { getAccessTokenRaw } = getKindeServerSession();
+    const accessToken = await getAccessTokenRaw();
 
-export const metadata: Metadata = {
-  title: 'Détails de la grille',
-  description: 'Détails et tournois de la grille',
-};
-
-export default async function GridDetailPage({ params }: Props) {
-  try {
-    const grid = await GridService.getGridById(params.id);
+    if (!accessToken) {
+    return <div>Vous devez être connecté pour accéder à cette page.</div>;
+    }
+    const grid = await GridService.getGridById(id, accessToken);
     
     return (
       <div className="p-8 max-w-7xl mx-auto">
@@ -74,11 +70,4 @@ export default async function GridDetailPage({ params }: Props) {
         </div>
       </div>
     );
-  } catch {
-    return (
-      <div className="p-8 text-center text-red-500">
-        Une erreur est survenue lors du chargement de la grille.
-      </div>
-    );
-  }
 }

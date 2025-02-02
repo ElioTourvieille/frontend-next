@@ -19,6 +19,8 @@ export default function SearchPage() {
     minBuyIn: '',
     maxBuyIn: '',
     format: '',
+    variant: '',
+    type: '',
     startDate: '',
     endDate: '',
   });
@@ -65,15 +67,17 @@ export default function SearchPage() {
       setError(null);
       setNoData(false);
 
-      const validFilters = Object.fromEntries(
-        Object.entries(filters).filter(([_, value]) => value !== ''),
-      );
+      //const validFilters = Object.fromEntries(
+      //  Object.entries(filters).filter(([key, value]) => value !== ''),
+      //);
 
       const results = await TournamentService.searchTournaments({
         room: filters.room,
         minBuyIn: filters.minBuyIn ? Number(filters.minBuyIn) : undefined,
         maxBuyIn: filters.maxBuyIn ? Number(filters.maxBuyIn) : undefined,
         format: filters.format,
+        variant: filters.variant,
+        type: filters.type,
         startDate: filters.startDate,
         endDate: filters.endDate,
       });
@@ -163,9 +167,39 @@ export default function SearchPage() {
               onChange={(e) => setFilters({ ...filters, format: e.target.value })}
             >
               <option value="">Tous les formats</option>
-              <option value="MTT">MTT</option>
-              <option value="SNG">SNG</option>
-              <option value="SPIN">SPIN</option>
+              <option value="Heads-up">Heads-up</option>
+              <option value="Short-handed">Short-handed</option>
+              <option value="Full ring">Full ring</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-200 mb-1">Variante</label>
+            <select
+              className="w-full bg-gray-700 text-gray-200 rounded px-3 py-2"
+              value={filters.variant}
+              onChange={(e) => setFilters({ ...filters, variant: e.target.value })}
+            >
+              <option value="">Toutes les variantes</option>
+              <option value="NLH">No Limit Hold&apos;em</option>
+              <option value="PLO">Pot Limit Omaha</option>
+              <option value="Other">Autres</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-200 mb-1">Type</label>
+            <select
+              className="w-full bg-gray-700 text-gray-200 rounded px-3 py-2"
+              value={filters.type}
+              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+            >
+              <option value="">Tous les types</option>
+              <option value="Standard">Standard</option>
+              <option value="Freezout">Freezout</option>
+              <option value="KO">KO</option>
+              <option value="Mystery KO">Mystery KO</option>
+              <option value="Space KO">Space KO</option>
             </select>
           </div>
 
@@ -222,6 +256,8 @@ export default function SearchPage() {
                 <th className="px-4 py-3 text-left text-gray-200">Room</th>
                 <th className="px-4 py-3 text-left text-gray-200">Buy-in</th>
                 <th className="px-4 py-3 text-left text-gray-200">Format</th>
+                <th className="px-4 py-3 text-left text-gray-200">Variante</th>
+                <th className="px-4 py-3 text-left text-gray-200">Type</th>
                 <th className="px-4 py-3 text-left text-gray-200">Début</th>
                 <th className="px-4 py-3 text-left text-gray-200">Actions</th>
               </tr>
@@ -233,6 +269,8 @@ export default function SearchPage() {
                   <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.format}</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.variant}</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.type}</td>
                   <td className="px-4 py-3 text-gray-300">
                     {formatDate(tournament.startTime)}
                   </td>

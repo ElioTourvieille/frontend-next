@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GridService } from '@/app/api/grids/service';
 import { useRouter } from 'next/navigation';
 import { Tournament } from '@/app/types/grid';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 export default function CreateGridPage() {
   const router = useRouter();
@@ -12,8 +13,20 @@ export default function CreateGridPage() {
     tournaments: [] as Tournament[]
   });
   const [error, setError] = useState('');
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Recover component assembly access token
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      const { getAccessTokenRaw } = getKindeServerSession();
+      const token = await getAccessTokenRaw();
+      setAccessToken(token);
+    };
+
+    fetchAccessToken();
+  }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -22,8 +35,13 @@ export default function CreateGridPage() {
       return;
     }
 
+    if (!accessToken) {
+      setError('Vous devez être connecté pour créer une grille');
+      return;
+    }
+
     try {
-      await GridService.createGrid(formData);
+      await GridService.createGrid(formData, accessToken);
       router.push('/user/grids');
     } catch {
       setError('Une erreur est survenue lors de la création de la grille');

@@ -3,7 +3,7 @@ import React from "react"
 
 export default function SubscriptionPlans() {
   return (
-    <div className="p-4 md:p-8">
+    <div className="p-4 md:p-8 lg:p-12">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-100">Abonnements</h1>
       </div>
@@ -62,7 +62,7 @@ export default function SubscriptionPlans() {
               <h4>
                 <span className="text-3xl">€</span>
                 <span className="text-5xl font-bold tracking-tighter text-gray-100 transition-all duration-300 lg:text-6xl">
-                  9.99
+                  14.99
                 </span>
                 <span className="text-sm">/mois</span>
               </h4>
@@ -108,7 +108,7 @@ export default function SubscriptionPlans() {
               <h4>
                 <span className="text-3xl">€</span>
                 <span className="text-5xl font-bold tracking-tighter text-gray-100 transition-all duration-300 lg:text-6xl">
-                  19.99
+                  24.99
                 </span>
                 <span className="text-sm">/mois</span>
               </h4>

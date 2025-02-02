@@ -19,11 +19,11 @@ export default function Avatar() {
     },
     {
       linkName: "Abonnement",
-      href: "#",
+      href: "/user/subscription",
     },
     {
       linkName: "Paramètres",
-      href: "#",
+      href: "/user/settings",
     },
     {
       linkName: "Déconnexion",

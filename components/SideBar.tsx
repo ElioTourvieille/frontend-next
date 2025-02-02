@@ -14,7 +14,7 @@ export default function SideBar() {
       id="nav-menu-1"
       aria-label="Side navigation"
       className="fixed left-0 top-[75px] lg:top-[105px] z-40 flex flex-col border-r border-r-slate-200 bg-gray-900 transition-all duration-300 h-[calc(100vh-72px)] lg:h-[calc(100vh-88px)]
-        w-20 md:w-[min(25vw,288px)]"
+        w-20 md:w-[min(17vw,288px)]"
     >
       <nav
         aria-label="side navigation"

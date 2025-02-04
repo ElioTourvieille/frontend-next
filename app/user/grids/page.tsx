@@ -34,7 +34,7 @@ export default async function GridsPage() {
         </Link>
       </div>
 
-      {/* Affichage des erreurs */}
+      {/* Error display */}
       {error ? (
         <div className="p-8 text-center text-amber-400 bg-amber-400/10 rounded-lg border border-amber-400/20">
           {error}

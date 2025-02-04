@@ -1,4 +1,4 @@
-import { CreateGridData } from "@/app/types/grid";
+import { CreateGridData, Grid } from "@/app/types/grid";
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
 
@@ -59,7 +59,7 @@ export const GridService = {
   },
 
   // Create a new grid
-  async createGrid(gridData: CreateGridData, token: string) {
+  async createGrid(gridData: CreateGridData, token: string): Promise<Grid> {
     try {
       const response = await fetch(`${BACKEND_URL}/grid`, {
         method: 'POST',
@@ -67,13 +67,22 @@ export const GridService = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(gridData),
+        body: JSON.stringify(gridData)
       });
 
-      if (!response.ok) throw new Error('Erreur lors de la création de la grille');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+        throw new Error(errorText || 'Erreur lors de la création de la grille');
+      }
+
       return await response.json();
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('GridService createGrid error:', error);
       throw error;
     }
   },

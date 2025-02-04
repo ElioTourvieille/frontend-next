@@ -20,5 +20,4 @@ export interface Grid {
 
 export interface CreateGridData {
   name: string;
-  tournaments: Tournament[];
 } 

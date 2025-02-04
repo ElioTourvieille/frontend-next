@@ -60,7 +60,7 @@ export default function NavbarActionButton() {
                 <Image src={logo}
                  alt="Poker ProGrid"
                   width={60} height={60}
-                  className="shadow-2xl shadow-black"
+                  className="w-auto h-auto shadow-2xl shadow-black lg:w-[60px] lg:h-[60px]"
                   />
                 <h2 className="text-2xl font-orbitron font-extrabold bg-gradient-to-r from-white to-blue-500 text-transparent bg-clip-text">
                   Poker ProGrid

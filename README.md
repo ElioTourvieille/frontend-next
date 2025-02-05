@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Poker Pro Grid
 
-## Getting Started
+## Description
+Poker Pro Grid is a modern web application that allows poker players to manage and optimise their multi-table tournament (MTT) sessions. The application offers features to create tournament grids, search and filter tournaments.
 
-First, run the development server:
+## Main features
+- 🎮 Tournament grid creation and management
+- 🔍 Advanced tournament filtering
+- 💳 Subscription system with Stripe
+- 🔐 Secure authentication with Kinde Auth
+- 🎨 Modern and responsive user interface
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Technologies used
+- Frontend**: Next.js 15 (App Router), React, TypeScript
+- Styling**: Tailwind CSS, Shadcn/ui
+- Authentication**: Kinde Auth
+- Payment**: Stripe
+- Database**: PostgreSQL (with Prisma) via NeonDB
+- Deployment**: Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- PostgreSQL
+- Stripe account
+- Kinde account
+- NeonDB account
+- A compatible API (see API section below)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Required
+This frontend application requires an API to work. You can use :
+- The official project API: [poker-pro-grid-api](https://github.com/ElioTourvieille/backend-nest.git)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+1. Clone the repository
+2. Install the dependencies with `npm install` or `yarn install`.
+3. Configure environment variables
+4. Start the server with `npm run dev` or `yarn dev`.
 
-To learn more about Next.js, take a look at the following resources:
+## Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Create a `.env.local` file and configure the environment variables
+2. The application requires a REST API providing the data
+2. Configure environment variables for Stripe and Kinde
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+1. Deploy the application with `npm run deploy` or `yarn deploy`.
+2. Configure environment variables for Stripe and Kinde
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project structure
+poker-pro-grid/
+├── app/ # Pages and routes Next.js
+│ ├── api/ # API routes
+│ ├── (root)/ # Landing page
+│ └── user/ # User pages
+│ └── (dashboard)/ # Dashboard page
+│ └── grids/ # Grid management page
+│ └── tournaments/ # Tournament management page
+├── components/ # React components
+├── lib/ # Utilities and configurations
+└── public/ # Static assets
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+

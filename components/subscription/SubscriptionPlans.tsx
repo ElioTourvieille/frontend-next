@@ -1,145 +1,137 @@
 'use client'
 import React from "react"
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
+
+const tiers = [
+  {
+    name: "Free",
+    id: "free",
+    price: "0",
+    current: true,
+    features: [
+      "Filtres limités",
+      "Fonctionnalités de base",
+      "Une seule grille"
+    ],
+  },
+  {
+    name: "Premium",
+    id: "premium",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_PRICE_ID,
+    price: "14.99",
+    features: [
+      "Grilles illimitées",
+      "Support prioritaire",
+      "Statistiques avancées"
+    ],
+
+  },
+  {
+    name: "Elite",
+    id: "elite",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_ELITE_PRICE_ID,
+    price: "24.99",
+    features: [
+      "Tout ce qui est inclus dans Premium",
+      "Fonctionnalités exclusives",
+      "Accès anticipé"
+    ],
+ 
+  },
+];
 
 export default function SubscriptionPlans() {
-  return (
-    <div className="p-4 md:p-8 lg:p-12">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-100">Abonnements</h1>
-      </div>
+  const handleSubscribe = async (priceId: string) => {
+    try {
+      console.log('1. Starting subscription with priceId:', priceId);
+
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId,
+        }),
+      });
+
+      console.log('2. Response status:', response.status);
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 max-w-[1400px] mx-auto">
-        {/* Free Plan */}
-        <div className="w-full max-w-md mx-auto overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800 text-gray-300">
-          <div className="flex flex-col">
-            <header className="flex flex-col gap-6 p-6">
-              <h3 className="text-xl font-bold text-gray-100">
-                Free
-                <span className="block text-sm font-normal text-gray-400">
-                  Plan de base gratuit
-                </span>
-              </h3>
-              <h4>
-                <span className="text-3xl">€</span>
-                <span className="text-5xl font-bold tracking-tighter text-gray-100 transition-all duration-300 lg:text-6xl">
-                  0
-                </span>
-                <span className="text-sm">/mois</span>
-              </h4>
-              <button className="inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-blue-600 px-6 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-blue-700 focus:bg-blue-700">
-                <span>Plan actuel</span>
-              </button>
-            </header>
-            <div className="p-6">
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Recherche de tournois basique
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Filtres limités
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      const data = await response.json();
+      console.log('3. Response data:', data);
 
-        {/* Premium Plan */}
-        <div className="w-full max-w-md mx-auto overflow-hidden rounded-xl bg-gray-900/50 border-2 border-blue-500 text-gray-300">
-          <div className="flex flex-col">
-            <header className="flex flex-col gap-6 p-6">
-              <h3 className="text-xl font-bold text-gray-100">
-                Premium
-                <span className="block text-sm font-normal text-gray-400">
-                  Pour les joueurs réguliers
-                </span>
-              </h3>
-              <h4>
-                <span className="text-3xl">€</span>
-                <span className="text-5xl font-bold tracking-tighter text-gray-100 transition-all duration-300 lg:text-6xl">
-                  14.99
-                </span>
-                <span className="text-sm">/mois</span>
-              </h4>
-              <button className="inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-blue-600 px-6 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-blue-700 focus:bg-blue-700">
-                <span>Souscrire</span>
-              </button>
-            </header>
-            <div className="p-6">
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Toutes les fonctionnalités Free
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Création de grilles illimitées
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Statistiques avancées
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-        {/* Elite Plan */}
-        <div className="w-full max-w-md mx-auto overflow-hidden rounded-xl bg-gray-900/50 border border-gray-800 text-gray-300">
-          <div className="flex flex-col">
-            <header className="flex flex-col gap-6 p-6">
-              <h3 className="text-xl font-bold text-gray-100">
-                Elite
-                <span className="block text-sm font-normal text-gray-400">
-                  Pour les professionnels
-                </span>
+      if (!data.url) {
+        throw new Error('No checkout URL received');
+      }
+
+      console.log('4. Redirecting to:', data.url);
+      window.location.href = data.url;
+    } catch (error) {
+      console.error('Subscription error:', error);
+      alert('Une erreur est survenue lors de la souscription. Veuillez réessayer.');
+    }
+  };
+
+  return (
+    <div className="mx-auto mt-10 lg:mt-20 max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl text-center">
+        <p className="mt-2 text-4xl text-gray-300 font-bold tracking-tight sm:text-5xl">
+          Choisissez votre plan
+        </p>
+      </div>
+
+      <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+        {tiers.map((tier) => (
+          <div
+            key={tier.id}
+            className="rounded-3xl p-8 bg-gray-900/80 text-gray-300 border border-gray-800 ring-1 ring-gray-200 dark:ring-gray-700 xl:p-10"
+          >
+            <div className="flex items-center justify-between gap-x-4">
+              <h3 className="text-lg font-semibold leading-8">
+                {tier.name}
               </h3>
-              <h4>
-                <span className="text-3xl">€</span>
-                <span className="text-5xl font-bold tracking-tighter text-gray-100 transition-all duration-300 lg:text-6xl">
-                  24.99
+              {tier.current && (
+                <span className="rounded-full bg-gray-300/10 px-2.5 py-1 text-xs font-semibold leading-5 text-gray-400">
+                  Plan actuel
                 </span>
-                <span className="text-sm">/mois</span>
-              </h4>
-              <button className="inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-blue-600 px-6 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-blue-700 focus:bg-blue-700">
-                <span>Souscrire</span>
-              </button>
-            </header>
-            <div className="p-6">
-              <ul className="space-y-4">
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Toutes les fonctionnalités Premium
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Assistant IA (bientôt disponible)
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6 shrink-0 p-1 text-blue-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  Support prioritaire
-                </li>
-              </ul>
+              )}
             </div>
+            <p className="mt-4 text-sm leading-6">
+              <span className="text-4xl font-bold">{tier.price}€</span>
+              <span className="text-sm font-semibold">/mois</span>
+            </p>
+            <ul className="mt-8 space-y-3">
+              {tier.features.map((feature) => (
+                <li key={feature} className="flex gap-x-3">
+                  <Check className="h-6 w-5 flex-none" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            {!tier.current && (
+              <Button
+                className="mt-8 w-full"
+                onClick={() => tier.priceId && handleSubscribe(tier.priceId)}
+              >
+                Souscrire à {tier.name}
+              </Button>
+            )}
+            {tier.current && (
+              <Button
+                variant="outline"
+                className="mt-8 w-full"
+                disabled
+              >
+                Votre plan actuel
+              </Button>
+            )}
           </div>
-        </div>
+        ))}
       </div>
     </div>
   )

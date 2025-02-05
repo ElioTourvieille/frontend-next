@@ -53,14 +53,23 @@ This frontend application requires an API to work. You can use :
 ## Project structure
 poker-pro-grid/
 ├── app/ # Pages and routes Next.js
+
 │ ├── api/ # API routes
+
 │ ├── (root)/ # Landing page
+
 │ └── user/ # User pages
+
 │ └── (dashboard)/ # Dashboard page
+
 │ └── grids/ # Grid management page
+
 │ └── tournaments/ # Tournament management page
+
 ├── components/ # React components
+
 ├── lib/ # Utilities and configurations
+
 └── public/ # Static assets
 
 

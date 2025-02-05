@@ -11,12 +11,13 @@ Poker Pro Grid is a modern web application that allows poker players to manage a
 - 🎨 Modern and responsive user interface
 
 ## Technologies used
-- Frontend**: Next.js 15 (App Router), React, TypeScript
-- Styling**: Tailwind CSS, Shadcn/ui
-- Authentication**: Kinde Auth
-- Payment**: Stripe
-- Database**: PostgreSQL (with Prisma) via NeonDB
-- Deployment**: Vercel
+- **Frontend**: Next.js 15 (App Router), React, TypeScript
+- **Styling**: Tailwind CSS, Shadcn/ui
+- **Animation**: GSAP
+- **Authentication**: Kinde Auth
+- **Payment**: Stripe
+- **Database**: PostgreSQL (with Prisma) via NeonDB
+- **Deployment**: Vercel
 
 ## Prerequisites
 - Node.js (v18 or higher)

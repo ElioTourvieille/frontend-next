@@ -60,7 +60,7 @@ export default function SettingsPage() {
 
         {settings.autoRefresh && (
           <div>
-            <h3 className="font-medium text-gray-300 mb-2">Intervalle d'actualisation (minutes)</h3>
+            <h3 className="font-medium text-gray-300 mb-2">Intervalle d&apos;actualisation (minutes)</h3>
             <input 
               type="number"
               min="1"

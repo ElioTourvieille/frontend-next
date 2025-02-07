@@ -2,7 +2,6 @@
 
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Shield, CreditCard, Bell } from "lucide-react";
-import AnimatedTitle from "@/components/AnimatedTitle";
 import { useEffect, useState } from "react";
 
 export default function AccountPage() {
@@ -14,7 +13,7 @@ export default function AccountPage() {
   }, []);
 
   if (!mounted) {
-    return null; // ou un loader/skeleton
+    return null;
   }
 
   return (

@@ -44,7 +44,6 @@ const tiers = [
 export default function SubscriptionPlans() {
   const handleSubscribe = async (priceId: string) => {
     try {
-      console.log('1. Starting subscription with priceId:', priceId);
 
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -56,10 +55,7 @@ export default function SubscriptionPlans() {
         }),
       });
 
-      console.log('2. Response status:', response.status);
-      
       const data = await response.json();
-      console.log('3. Response data:', data);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -69,7 +65,6 @@ export default function SubscriptionPlans() {
         throw new Error('No checkout URL received');
       }
 
-      console.log('4. Redirecting to:', data.url);
       window.location.href = data.url;
     } catch (error) {
       console.error('Subscription error:', error);
@@ -80,12 +75,14 @@ export default function SubscriptionPlans() {
   return (
     <div className="mx-auto mt-10 lg:mt-20 max-w-7xl px-6 lg:px-8">
       <div className="mx-auto max-w-4xl text-center">
-        <p className="mt-2 text-4xl text-gray-300 font-bold tracking-tight sm:text-5xl">
+      <h2 className="mb-20 text-4xl text-gray-300 font-bold tracking-tight sm:text-5xl">
           Choisissez votre plan
-        </p>
+        </h2>
       </div>
 
+
       <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+
         {tiers.map((tier) => (
           <div
             key={tier.id}

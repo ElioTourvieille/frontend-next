@@ -21,14 +21,14 @@ export default function AccountPage() {
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Header Section */}
-          <div className="mb-8">
-            <AnimatedTitle
-              title="Paramètres du compte"
-              containerClass="text-left !text-2xl"
-            />
+          <div className="mt-4">
+            <h2 className="mb-10 text-4xl text-gray-300 font-bold tracking-tight sm:text-5xl">
+              Compte
+            </h2>
             <p className="text-gray-400 mt-2">
               Gérez vos informations personnelles et vos préférences
             </p>
+
           </div>
 
           {/* Profile Section */}

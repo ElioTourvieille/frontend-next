@@ -1,5 +1,16 @@
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
 
+interface SearchResponse {
+  id: number;
+  name: string;
+  buyIn: number;
+  startTime: string;
+  room: string;
+  format: string;
+  variant?: string;
+  type?: string;
+}
+
 export const TournamentService = {
   async getAllTournaments() {
     try {
@@ -42,10 +53,24 @@ export const TournamentService = {
       }
 
       const data = await response.json();
-      return data;
+      
+      // Utiliser le type approprié au lieu de any
+      return data.map((tournament: SearchResponse) => ({
+        ...tournament,
+        format: this.formatTableSize(tournament.format)
+      }));
     } catch (error) {
       console.error('Erreur:', error);
-      return { data: [], meta: {} };
+      throw error;
     }
   },
+
+  formatTableSize(format: string): string {
+    const formatMap: { [key: string]: string } = {
+      'FULL_RING': 'Full Ring',
+      'SHORT_HANDED': 'Short-Handed',
+      'HEADS_UP': 'Heads-Up'
+    };
+    return formatMap[format] || format;
+  }
 };

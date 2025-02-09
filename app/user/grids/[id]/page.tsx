@@ -1,6 +1,6 @@
 import { GridService } from '@/app/api/grids/service';
 import { Tournament } from '@/app/types/grid';
-import { formatDate } from '@/lib/utils';
+import { formatDate, formatTime } from '@/lib/utils';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
 export default async function GridDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -58,11 +58,12 @@ export default async function GridDetailPage({ params }: { params: Promise<{ id:
                     <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
                     <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
                     <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
-                    <td className="px-4 py-3 text-gray-300">{tournament.format}</td>
+                    <td className="px-4 py-3 text-gray-300">{tournament.type}</td>
                     <td className="px-4 py-3 text-gray-300">
-                      {formatDate(tournament.startTime)}
+                      {formatTime(tournament.startTime)}
                     </td>
                   </tr>
+
                 ))}
               </tbody>
             </table>

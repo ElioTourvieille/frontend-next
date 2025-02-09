@@ -69,7 +69,7 @@ export default async function GridsPage() {
                   Créée le {formatDate(grid.createdAt)}
                 </p>
                 <p className="text-sm text-gray-400">
-                  Buy-in total: {grid.tournaments.reduce((acc, t) => acc + t.buyIn, 0)}€
+                  Buy-in total: {grid.tournaments.reduce((acc, t) => acc + (Number(t.buyIn) || 0), 0)}€
                 </p>
               </div>
             </Link>

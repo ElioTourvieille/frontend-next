@@ -4,7 +4,18 @@ import { useState, useEffect } from 'react';
 import { Tournament, Grid } from '@/app/types/grid';
 import { GridService } from '@/app/api/grids/service';
 import { TournamentService } from '@/app/api/tournaments/service';
-import { formatDate } from '@/lib/utils';
+import { formatTime } from '@/lib/utils';
+
+interface Filters {
+  room: string;
+  minBuyIn: string | number;
+  maxBuyIn: string | number;
+  format: string;
+  variant: string;
+  type: string;
+  startDate: string;
+  endDate: string;
+}
 
 export default function SearchPage() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -13,8 +24,10 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [noData, setNoData] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const tournamentsPerPage = 10;
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     room: '',
     minBuyIn: '',
     maxBuyIn: '',
@@ -66,21 +79,17 @@ export default function SearchPage() {
       setLoading(true);
       setError(null);
       setNoData(false);
+      setCurrentPage(1);
 
-      //const validFilters = Object.fromEntries(
-      //  Object.entries(filters).filter(([key, value]) => value !== ''),
-      //);
+      const validFilters = Object.fromEntries(
+        Object.entries(filters).filter(([ value]) => value !== '')
+      );
 
-      const results = await TournamentService.searchTournaments({
-        room: filters.room,
-        minBuyIn: filters.minBuyIn ? Number(filters.minBuyIn) : undefined,
-        maxBuyIn: filters.maxBuyIn ? Number(filters.maxBuyIn) : undefined,
-        format: filters.format,
-        variant: filters.variant,
-        type: filters.type,
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-      });
+      // Convertir les valeurs numériques
+      if (validFilters.minBuyIn) validFilters.minBuyIn = Number(validFilters.minBuyIn);
+      if (validFilters.maxBuyIn) validFilters.maxBuyIn = Number(validFilters.maxBuyIn);
+
+      const results = await TournamentService.searchTournaments(validFilters);
 
       if (!results || results.length === 0) {
         setNoData(true);
@@ -115,6 +124,33 @@ export default function SearchPage() {
       setLoading(false);
     }
   };
+
+  const indexOfLastTournament = currentPage * tournamentsPerPage;
+  const indexOfFirstTournament = indexOfLastTournament - tournamentsPerPage;
+  const currentTournaments = tournaments.slice(indexOfFirstTournament, indexOfLastTournament);
+  const totalPages = Math.ceil(tournaments.length / tournamentsPerPage);
+
+  const Pagination = () => (
+    <div className="mt-4 flex justify-center gap-2">
+      <button
+        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+        className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
+      >
+        Précédent
+      </button>
+      <span className="px-3 py-1 text-gray-200">
+        Page {currentPage} sur {totalPages}
+      </span>
+      <button
+        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+        className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
+      >
+        Suivant
+      </button>
+    </div>
+  );
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -263,7 +299,7 @@ export default function SearchPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {tournaments.map((tournament) => (
+              {currentTournaments.map((tournament) => (
                 <tr key={tournament.id} className="hover:bg-gray-800/50">
                   <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
@@ -272,7 +308,7 @@ export default function SearchPage() {
                   <td className="px-4 py-3 text-gray-300">{tournament.variant}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.type}</td>
                   <td className="px-4 py-3 text-gray-300">
-                    {formatDate(tournament.startTime)}
+                    {formatTime(tournament.startTime)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -304,6 +340,7 @@ export default function SearchPage() {
           </table>
         )}
       </div>
+      <Pagination />
     </div>
   );
 }

@@ -2,10 +2,10 @@ export interface Tournament {
   id: number;
   name: string;
   buyIn: number;
-  startTime: Date;
-  format: string;  // Heads-up, short-handed, full ring
-  variant: string; // PLO, NLH, autres
-  type: string;    // KO, Mystery KO, Space KO, standard, freezout
+  startTime: string;
+  format: 'Heads-up' | 'Short-handed' | 'Full ring';
+  variant: string;
+  type: string;
   room: string;
 }
 

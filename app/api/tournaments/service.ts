@@ -15,12 +15,14 @@ export const TournamentService = {
     try {
       const baseUrl = `${BACKEND_URL}/tournaments/search`;
       
+      // Add the pagination to the params
       const params = new URLSearchParams({
         page: pagination.page.toString(),
         pageSize: pagination.pageSize.toString(),
         room: filters.room || ''
       });
 
+      // Add the filters to the params
       if (filters.minBuyIn) params.append('buyInMin', filters.minBuyIn.toString());
       if (filters.maxBuyIn) params.append('buyInMax', filters.maxBuyIn.toString());
       if (filters.tableSize) params.append('tableSize', filters.tableSize);
@@ -49,7 +51,7 @@ export const TournamentService = {
 
       const responseData = await response.json();
       
-      // Vérification des données reçues
+      // Check the received data
       if (!responseData || !responseData.data || !responseData.meta) {
         throw new Error('Invalid response format from server');
       }

@@ -39,6 +39,7 @@ export function GridCard({ grid }: GridCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  // Handle the delete grid
   const handleDelete = async () => {
     try {
       setIsDeleting(true);

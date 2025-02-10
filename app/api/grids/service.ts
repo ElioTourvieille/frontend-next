@@ -105,9 +105,11 @@ export const GridService = {
     }
   },
 
+  // Update a grid
   async updateGrid(gridId: string, name: string, accessToken: string) {
     try {
       if (!gridId || !name || !accessToken) {
+
         throw new Error('Missing required parameters');
       }
 
@@ -115,15 +117,6 @@ export const GridService = {
         name: name.trim(),
         tournamentIds: []
       };
-
-      console.log('Update grid payload:', {
-        url: `${BACKEND_URL}/grid/${gridId}`,
-        payload,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken.substring(0, 10)}...`,
-        }
-      });
 
       const response = await fetch(`${BACKEND_URL}/grid/${gridId}`, {
         method: 'PUT',
@@ -152,6 +145,7 @@ export const GridService = {
     }
   },
 
+  // Delete a grid
   async deleteGrid(id: string, accessToken: string) {
     try {
       const response = await fetch(`${BACKEND_URL}/grid/${id}`, {
@@ -171,7 +165,8 @@ export const GridService = {
       throw error;
     }
   },
-
+  
+  // Remove a tournament from a grid
   async removeTournamentFromGrid(gridId: string, tournamentId: number, accessToken: string) {
     try {
       const response = await fetch(`${BACKEND_URL}/grid/${gridId}/remove-tournament/${tournamentId}`, {
@@ -181,7 +176,6 @@ export const GridService = {
           'Authorization': `Bearer ${accessToken}`,
         },
       });
-
 
       if (!response.ok) {
         const errorData = await response.json();

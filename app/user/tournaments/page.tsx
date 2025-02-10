@@ -24,7 +24,7 @@ interface PaginationMeta {
 }
 
 interface AddedTournaments {
-  [gridId: number]: number[]; // gridId -> array of tournamentIds
+  [gridId: number]: number[];
 }
 
 export default function SearchPage() {
@@ -48,6 +48,7 @@ export default function SearchPage() {
     type: '',
   });
 
+  // Load the initial data
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -88,6 +89,7 @@ export default function SearchPage() {
     loadInitialData();
   }, [currentPage, pageSize]);
 
+  // Load the tournaments of the grids
   useEffect(() => {
     const loadGridTournaments = async () => {
       try {
@@ -229,7 +231,7 @@ export default function SearchPage() {
 
       <div className="mb-6 p-4 bg-gray-800/30 rounded-lg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Filtres */}
+          {/* Filters section */}
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-1">Room</label>
             <select

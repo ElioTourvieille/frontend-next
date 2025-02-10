@@ -2,6 +2,7 @@
 import React from "react"
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { toast } from "sonner";
 
 const tiers = [
   {
@@ -68,7 +69,7 @@ export default function SubscriptionPlans() {
       window.location.href = data.url;
     } catch (error) {
       console.error('Subscription error:', error);
-      alert('Une erreur est survenue lors de la souscription. Veuillez réessayer.');
+      toast.error('Une erreur est survenue lors de la souscription. Veuillez réessayer.');
     }
   };
 

@@ -7,7 +7,9 @@ import Link from "next/link";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function SideBar() {
+  // Use the pathname to check if the user is on the current page
   const pathname = usePathname();
+
 
   return (
     <aside

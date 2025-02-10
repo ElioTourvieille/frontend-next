@@ -8,6 +8,7 @@ export default function AccountPage() {
   const { user } = useKindeBrowserClient();
   const [mounted, setMounted] = useState(false);
 
+  // check if the component is mounted
   useEffect(() => {
     setMounted(true);
   }, []);

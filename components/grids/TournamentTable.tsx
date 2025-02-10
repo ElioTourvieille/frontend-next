@@ -81,6 +81,7 @@ export function TournamentTable({ tournaments, gridId }: TournamentTableProps) {
         </tbody>
       </table>
 
+      {/* Confirm dialog to delete a tournament */}
       <ConfirmDialog
         isOpen={showDeleteDialog}
         onClose={() => {

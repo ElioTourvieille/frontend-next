@@ -22,7 +22,7 @@ function AnimatedTitle({ title, containerClass }: AnimatedTitleProps) {
       words.forEach((word) => {
         // Create a ScrollTrigger for each word
         ScrollTrigger.create({
-          trigger: word, // Each word is a trigger
+          trigger: word,
           start: "top 95%", 
           end: "top 80%",
           toggleActions: "play reverse play reverse",

@@ -1,76 +1,80 @@
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
-
-interface SearchResponse {
-  id: number;
-  name: string;
-  buyIn: number;
-  startTime: string;
-  room: string;
-  format: string;
-  variant?: string;
-  type?: string;
-}
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
 export const TournamentService = {
-  async getAllTournaments() {
+  async searchTournaments(
+    filters: {
+      room?: string;
+      minBuyIn?: number;
+      maxBuyIn?: number;
+      variant?: string;
+      type?: string;
+      tableSize?: string;
+    },
+    pagination: { page: number; pageSize: number }
+  ) {
     try {
-      // Use searchTournaments without filters to retrieve all tournaments
-      const results = await this.searchTournaments({});
-      return results.data || [];
-    } catch (error) {
-      console.error('Erreur lors de la récupération des tournois:', error);
-      return [];
-    }
-  },
-
-  async searchTournaments(filters: {
-    room?: string;
-    minBuyIn?: number;
-    maxBuyIn?: number;
-    format?: string;
-    variant?: string;
-    type?: string;
-    startDate?: string;
-    endDate?: string;
-  }) {
-    try {
-      const queryParams = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined && value !== '') {
-          queryParams.append(key, value.toString());
-        }
+      const baseUrl = `${BACKEND_URL}/tournaments/search`;
+      
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        pageSize: pagination.pageSize.toString(),
+        room: filters.room || ''
       });
 
-      const response = await fetch(`${BACKEND_URL}/tournaments/search?${queryParams}`, {
+      if (filters.minBuyIn) params.append('buyInMin', filters.minBuyIn.toString());
+      if (filters.maxBuyIn) params.append('buyInMax', filters.maxBuyIn.toString());
+      if (filters.tableSize) params.append('tableSize', filters.tableSize);
+      if (filters.variant) params.append('variant', filters.variant);
+      if (filters.type) params.append('type', filters.type);
+
+      const url = `${baseUrl}?${params.toString()}`;
+
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
       });
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la recherche des tournois');
+        const errorText = await response.text();
+        console.error('Response error:', {
+          status: response.status,
+          text: errorText,
+          url: url
+        });
+        throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
+      const responseData = await response.json();
       
-      // Utiliser le type approprié au lieu de any
-      return data.map((tournament: SearchResponse) => ({
-        ...tournament,
-        format: this.formatTableSize(tournament.format)
-      }));
-    } catch (error) {
-      console.error('Erreur:', error);
-      throw error;
-    }
-  },
+      // Vérification des données reçues
+      if (!responseData || !responseData.data || !responseData.meta) {
+        throw new Error('Invalid response format from server');
+      }
 
-  formatTableSize(format: string): string {
-    const formatMap: { [key: string]: string } = {
-      'FULL_RING': 'Full Ring',
-      'SHORT_HANDED': 'Short-Handed',
-      'HEADS_UP': 'Heads-Up'
-    };
-    return formatMap[format] || format;
+      return {
+        tournaments: responseData.data,
+        pagination: {
+          totalResults: responseData.meta.totalResults,
+          currentPage: responseData.meta.currentPage,
+          totalPages: responseData.meta.totalPages,
+          pageSize: responseData.meta.pageSize
+        }
+      };
+    } catch (error) {
+      console.error('Error fetching tournaments:', error);
+
+      return {
+        tournaments: [],
+        pagination: {
+          totalResults: 0,
+          currentPage: pagination.page,
+          totalPages: 0,
+          pageSize: pagination.pageSize
+        }
+      };
+    }
   }
 };

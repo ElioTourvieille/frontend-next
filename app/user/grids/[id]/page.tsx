@@ -1,7 +1,8 @@
 import { GridService } from '@/app/api/grids/service';
 import { Tournament } from '@/app/types/grid';
-import { formatDate, formatTime } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { TournamentTable } from '@/components/grids/TournamentTable';
 
 export default async function GridDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -41,33 +42,11 @@ export default async function GridDetailPage({ params }: { params: Promise<{ id:
             </div>
           </div>
 
-          <div className="bg-gray-800/30 rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-800">
-                <tr>
-                  <th className="px-4 py-3 text-left text-gray-200">Tournoi</th>
-                  <th className="px-4 py-3 text-left text-gray-200">Room</th>
-                  <th className="px-4 py-3 text-left text-gray-200">Buy-in</th>
-                  <th className="px-4 py-3 text-left text-gray-200">Format</th>
-                  <th className="px-4 py-3 text-left text-gray-200">Début</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                {grid.tournaments.map((tournament: Tournament) => (
-                  <tr key={tournament.id} className="hover:bg-gray-800/50">
-                    <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
-                    <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
-                    <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
-                    <td className="px-4 py-3 text-gray-300">{tournament.type}</td>
-                    <td className="px-4 py-3 text-gray-300">
-                      {formatTime(tournament.startTime)}
-                    </td>
-                  </tr>
+          
+        </div>
 
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="mt-8">
+          <TournamentTable tournaments={grid.tournaments} gridId={id} />
         </div>
       </div>
     );

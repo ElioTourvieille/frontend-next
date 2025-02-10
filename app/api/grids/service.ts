@@ -1,6 +1,4 @@
-import { CreateGridData, Grid } from "@/app/types/grid";
-
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-nest-2hsm.onrender.com';
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
 export const GridService = {
   // Get all grids
@@ -59,28 +57,28 @@ export const GridService = {
   },
 
   // Create a new grid
-  async createGrid(gridData: CreateGridData, token: string): Promise<Grid> {
+  async createGrid(name: string, accessToken: string) {
     try {
       const response = await fetch(`${BACKEND_URL}/grid`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(gridData)
+        body: JSON.stringify({ name }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorData = await response.text();
         console.error('Server error response:', {
           status: response.status,
           statusText: response.statusText,
-          body: errorText
+          body: errorData
         });
-        throw new Error(errorText || 'Erreur lors de la création de la grille');
+        throw new Error(errorData);
       }
 
-      return await response.json();
+      return response.json();
     } catch (error) {
       console.error('GridService createGrid error:', error);
       throw error;
@@ -105,5 +103,95 @@ export const GridService = {
       console.error('Erreur:', error);
       throw error;
     }
-  }
+  },
+
+  async updateGrid(gridId: string, name: string, accessToken: string) {
+    try {
+      if (!gridId || !name || !accessToken) {
+        throw new Error('Missing required parameters');
+      }
+
+      const payload = {
+        name: name.trim(),
+        tournamentIds: []
+      };
+
+      console.log('Update grid payload:', {
+        url: `${BACKEND_URL}/grid/${gridId}`,
+        payload,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken.substring(0, 10)}...`,
+        }
+      });
+
+      const response = await fetch(`${BACKEND_URL}/grid/${gridId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Update grid error:', {
+          status: response.status,
+          data,
+          gridId,
+        });
+        throw new Error(`Erreur lors de la mise à jour de la grille: ${data.message || 'Unknown error'}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('GridService updateGrid error:', error);
+      throw error;
+    }
+  },
+
+  async deleteGrid(id: string, accessToken: string) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/grid/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de la suppression de la grille');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('GridService deleteGrid error:', error);
+      throw error;
+    }
+  },
+
+  async removeTournamentFromGrid(gridId: string, tournamentId: number, accessToken: string) {
+    try {
+      const response = await fetch(`${BACKEND_URL}/grid/${gridId}/remove-tournament/${tournamentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Erreur lors du retrait du tournoi: ${errorData.message || 'Unknown error'}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('GridService removeTournamentFromGrid error:', error);
+      throw error;
+    }
+  },
 };

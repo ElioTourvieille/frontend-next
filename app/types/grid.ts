@@ -7,6 +7,7 @@ export interface Tournament {
   variant: string;
   type: string;
   room: string;
+  tableSize: string;
 }
 
 export interface Grid {

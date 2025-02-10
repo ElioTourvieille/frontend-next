@@ -5,6 +5,7 @@ import { AuthProvider } from "./AuthProvider";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import UserNavbar from "@/components/UserNavbar";
 import Image from "next/image";
+import { Toaster } from 'sonner';
 
 const roboto = Roboto_Condensed({
   weight: ["300", "400", "500", "600", "700"],
@@ -43,6 +44,7 @@ export default async function RootLayout({
               {isAuthed && <UserNavbar />}
               {children}
             </div>
+            <Toaster richColors position="top-right" />
         </body>
       </html>
     </AuthProvider>

@@ -18,11 +18,6 @@ interface QuickActionCardProps {
   icon: React.ReactNode;
 }
 
-// interface SponsorLogoProps {
-//   name: string;
-//   path: string;
-// }
-
 interface NewsCardProps {
   title: string;
   description: string;
@@ -45,17 +40,9 @@ export default function MainPage() {
             Trouvez et analysez les meilleurs tournois de poker en ligne
           </p>
         </div>
-        {/* <div className="absolute top-0 right-0 w-1/3 h-full opacity-10">
-          <Image
-            src="/img/poker-pattern.png" 
-            alt="Background pattern"
-            fill
-            className="object-cover"
-          />
-        </div> */}
       </section>
 
-      {/* Stats Section - Modernisé */}
+      {/* Stats Section */}
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Tournois En Ligne"
@@ -91,10 +78,11 @@ export default function MainPage() {
         />
       </section>
 
-      {/* Quick Actions - Modernisé */}
+      {/* Quick Actions */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <AnimatedTitle
+
             title="Actions Rapides"
             containerClass="text-left !text-2xl"
           />
@@ -106,10 +94,11 @@ export default function MainPage() {
           <QuickActionCard
             title="Créer une Grille"
             description="Optimisez votre session avec notre outil d'analyse"
-            href="/user/grids/new"
+            href="/user/grids/create"
             icon={<span className="text-2xl">🎯</span>}
           />
           <QuickActionCard
+
             title="Explorer les Tournois"
             description="Filtrez parmi +1000 tournois quotidiens"
             href="/user/tournaments"
@@ -124,9 +113,10 @@ export default function MainPage() {
         </div>
       </section>
 
-      {/* News Section - Modernisé */}
+      {/* News Section */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
+
           <AnimatedTitle
             title="Actualités Poker"
             containerClass="text-left !text-2xl"
@@ -160,7 +150,7 @@ export default function MainPage() {
   );
 }
 
-// Composants modernisés
+// Modernised components
 const StatsCard = ({ title, value, subtext, icon, trend, trendUp }: StatsCardProps) => (
   <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 hover:bg-gray-500/50 transition-colors">
     <div className="flex items-center justify-between">

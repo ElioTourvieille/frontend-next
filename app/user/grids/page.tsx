@@ -1,8 +1,8 @@
 import { GridService } from '@/app/api/grids/service';
 import { Grid } from '@/app/types/grid';
-import { formatDate } from '@/lib/utils';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import Link from 'next/link';
+import { GridCard } from '@/components/grids/GridCard';
 
 export default async function GridsPage() {
   const { getAccessTokenRaw } = getKindeServerSession();
@@ -34,7 +34,6 @@ export default async function GridsPage() {
         </Link>
       </div>
 
-      {/* Error display */}
       {error ? (
         <div className="p-8 text-center text-amber-400 bg-amber-400/10 rounded-lg border border-amber-400/20">
           {error}
@@ -42,37 +41,18 @@ export default async function GridsPage() {
           Veuillez réessayer plus tard.
         </div>
       ) : grids.length === 0 ? (
-        // Display when there are no grids
         <div className="p-8 text-center text-gray-400 bg-gray-800/50 rounded-lg border border-gray-700">
           Vous n&apos;avez pas encore créé de grille de tournois.
           <br />
           Commencez par en créer une !
         </div>
       ) : (
-        // Grid display
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {grids.map((grid: Grid) => (
-            <Link
-              href={`/user/grids/${grid.id}`}
-              key={grid.id}
-              className="p-6 bg-gray-800/50 rounded-lg border border-gray-700 hover:bg-gray-800 transition-colors"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-semibold text-gray-100">{grid.name}</h2>
-                <span className="text-sm text-gray-400">
-                  {grid.tournaments.length} tournois
-                </span>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm text-gray-400">
-                  Créée le {formatDate(grid.createdAt)}
-                </p>
-                <p className="text-sm text-gray-400">
-                  Buy-in total: {grid.tournaments.reduce((acc, t) => acc + (Number(t.buyIn) || 0), 0)}€
-                </p>
-              </div>
-            </Link>
+            <GridCard 
+              key={grid.id} 
+              grid={grid}
+            />
           ))}
         </div>
       )}

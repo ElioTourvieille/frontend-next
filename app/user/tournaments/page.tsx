@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { Tournament, Grid } from '@/app/types/grid';
 import { GridService } from '@/app/api/grids/service';
 import { TournamentService } from '@/app/api/tournaments/service';
@@ -10,11 +11,20 @@ interface Filters {
   room: string;
   minBuyIn: string | number;
   maxBuyIn: string | number;
-  format: string;
+  tableSize: string;
   variant: string;
   type: string;
-  startDate: string;
-  endDate: string;
+}
+
+interface PaginationMeta {
+  totalResults: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+}
+
+interface AddedTournaments {
+  [gridId: number]: number[]; // gridId -> array of tournamentIds
 }
 
 export default function SearchPage() {
@@ -25,17 +35,17 @@ export default function SearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [noData, setNoData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const tournamentsPerPage = 10;
+  const [pageSize, setPageSize] = useState(10);
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta | null>(null);
+  const [addedTournaments, setAddedTournaments] = useState<AddedTournaments>({});
 
   const [filters, setFilters] = useState<Filters>({
     room: '',
     minBuyIn: '',
     maxBuyIn: '',
-    format: '',
+    tableSize: '',
     variant: '',
     type: '',
-    startDate: '',
-    endDate: '',
   });
 
   useEffect(() => {
@@ -45,24 +55,28 @@ export default function SearchPage() {
         setError(null);
         setNoData(false);
 
-        // Retrieve access token from server-side route API
         const authResponse = await fetch('/api/auth');
         if (!authResponse.ok) {
           throw new Error('Failed to fetch access token');
         }
         const { accessToken } = await authResponse.json();
 
-        const [userGrids, allTournaments] = await Promise.all([
+        const [userGrids, tournamentsResponse] = await Promise.all([
           GridService.getAllGrids(accessToken),
-          TournamentService.getAllTournaments(),
+          TournamentService.searchTournaments(
+            {}, // filtres vides
+            { page: currentPage, pageSize }
+          )
         ]);
 
-        if (!userGrids || !allTournaments) {
+        if (!userGrids || !tournamentsResponse?.tournaments) {
           setNoData(true);
+          return;
         }
 
-        setGrids(userGrids || []);
-        setTournaments(allTournaments || []);
+        setGrids(userGrids);
+        setTournaments(tournamentsResponse.tournaments);
+        setPaginationMeta(tournamentsResponse.pagination);
       } catch (error) {
         console.error('Erreur:', error);
         setError('Erreur lors du chargement des données');
@@ -72,30 +86,58 @@ export default function SearchPage() {
     };
 
     loadInitialData();
-  }, []);
+  }, [currentPage, pageSize]);
+
+  useEffect(() => {
+    const loadGridTournaments = async () => {
+      try {
+        const authResponse = await fetch('/api/auth');
+        if (!authResponse.ok) return;
+        const { accessToken } = await authResponse.json();
+
+        const gridTournaments: AddedTournaments = {};
+        
+        for (const grid of grids) {
+          const gridData = await GridService.getGridById(grid.id.toString(), accessToken);
+          gridTournaments[grid.id] = gridData.tournaments.map((t: Tournament) => t.id);
+        }
+        
+        setAddedTournaments(gridTournaments);
+      } catch (error) {
+        console.error('Erreur lors du chargement des tournois des grilles:', error);
+      }
+    };
+
+    if (grids.length > 0) {
+      loadGridTournaments();
+    }
+  }, [grids]);
 
   const handleSearch = async () => {
     try {
       setLoading(true);
       setError(null);
       setNoData(false);
-      setCurrentPage(1);
 
       const validFilters = Object.fromEntries(
         Object.entries(filters).filter(([ value]) => value !== '')
       );
 
-      // Convertir les valeurs numériques
       if (validFilters.minBuyIn) validFilters.minBuyIn = Number(validFilters.minBuyIn);
       if (validFilters.maxBuyIn) validFilters.maxBuyIn = Number(validFilters.maxBuyIn);
 
-      const results = await TournamentService.searchTournaments(validFilters);
+      const response = await TournamentService.searchTournaments(validFilters, {
+        page: currentPage,
+        pageSize
+      });
 
-      if (!results || results.length === 0) {
+      if (!response?.tournaments || response.tournaments.length === 0) {
         setNoData(true);
+        return;
       }
 
-      setTournaments(results || []);
+      setTournaments(response.tournaments);
+      setPaginationMeta(response.pagination);
     } catch (error) {
       console.error('Erreur:', error);
       setError('Erreur lors de la recherche');
@@ -116,39 +158,68 @@ export default function SearchPage() {
       const { accessToken } = await authResponse.json();
 
       await GridService.addTournamentToGrid(gridId, tournamentId, accessToken);
-      alert('Tournoi ajouté à la grille avec succès !');
+      
+      setAddedTournaments(prev => ({
+        ...prev,
+        [gridId]: [...(prev[gridId] || []), tournamentId]
+      }));
+
+      toast.success('Tournoi ajouté à la grille avec succès !', {
+        description: 'Vous pouvez le retrouver dans votre grille',
+        duration: 3000,
+      });
     } catch (error) {
       console.error('Erreur:', error);
-      setError('Erreur lors de l\'ajout du tournoi à la grille');
+      toast.error('Erreur lors de l\'ajout du tournoi', {
+        description: 'Veuillez réessayer plus tard',
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const indexOfLastTournament = currentPage * tournamentsPerPage;
-  const indexOfFirstTournament = indexOfLastTournament - tournamentsPerPage;
-  const currentTournaments = tournaments.slice(indexOfFirstTournament, indexOfLastTournament);
-  const totalPages = Math.ceil(tournaments.length / tournamentsPerPage);
-
   const Pagination = () => (
-    <div className="mt-4 flex justify-center gap-2">
-      <button
-        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-        className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
-      >
-        Précédent
-      </button>
-      <span className="px-3 py-1 text-gray-200">
-        Page {currentPage} sur {totalPages}
-      </span>
-      <button
-        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-        className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
-      >
-        Suivant
-      </button>
+    <div className="mt-4 flex flex-col items-center gap-4">
+      <div className="flex items-center gap-4">
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+            setCurrentPage(1);
+          }}
+          className="bg-gray-700 text-gray-200 rounded px-3 py-2"
+        >
+          <option value="10">10 par page</option>
+          <option value="25">25 par page</option>
+          <option value="50">50 par page</option>
+          <option value="100">100 par page</option>
+        </select>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1 || loading}
+            className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
+          >
+            Précédent
+          </button>
+          <span className="px-3 py-1 text-gray-200">
+            Page {paginationMeta?.currentPage || 1} sur {paginationMeta?.totalPages || 1}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, paginationMeta?.totalPages || 1))}
+            disabled={currentPage === (paginationMeta?.totalPages || 1) || loading}
+            className="px-3 py-1 bg-gray-700 text-gray-200 rounded disabled:opacity-50"
+          >
+            Suivant
+          </button>
+        </div>
+      </div>
+      {paginationMeta && (
+        <div className="text-gray-400 text-sm">
+          Total: {paginationMeta.totalResults} tournois
+        </div>
+      )}
     </div>
   );
 
@@ -168,10 +239,11 @@ export default function SearchPage() {
             >
               <option value="">Toutes les rooms</option>
               <option value="Winamax">Winamax</option>
-              <option value="PokerStars">PokerStars</option>
+              <option value="GGPoker">GGPoker</option>
               <option value="PMU">PMU</option>
             </select>
           </div>
+
 
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-1">Buy-in min</label>
@@ -199,13 +271,13 @@ export default function SearchPage() {
             <label className="block text-sm font-medium text-gray-200 mb-1">Format</label>
             <select
               className="w-full bg-gray-700 text-gray-200 rounded px-3 py-2"
-              value={filters.format}
-              onChange={(e) => setFilters({ ...filters, format: e.target.value })}
+              value={filters.tableSize}
+              onChange={(e) => setFilters({ ...filters, tableSize: e.target.value })}
             >
               <option value="">Tous les formats</option>
-              <option value="Heads-up">Heads-up</option>
-              <option value="Short-handed">Short-handed</option>
-              <option value="Full ring">Full ring</option>
+              <option value="HEADS_UP">Heads-up</option>
+              <option value="SHORT_HANDED">Short-handed</option>
+              <option value="FULL_RING">Full ring</option>
             </select>
           </div>
 
@@ -217,9 +289,9 @@ export default function SearchPage() {
               onChange={(e) => setFilters({ ...filters, variant: e.target.value })}
             >
               <option value="">Toutes les variantes</option>
-              <option value="NLH">No Limit Hold&apos;em</option>
-              <option value="PLO">Pot Limit Omaha</option>
-              <option value="Other">Autres</option>
+              <option value="NO_LIMIT_HOLDEM">No Limit Hold&apos;em</option>
+              <option value="POT_LIMIT_OMAHA">Pot Limit Omaha</option>
+              <option value="OTHER">Autres</option>
             </select>
           </div>
 
@@ -231,32 +303,13 @@ export default function SearchPage() {
               onChange={(e) => setFilters({ ...filters, type: e.target.value })}
             >
               <option value="">Tous les types</option>
-              <option value="Standard">Standard</option>
-              <option value="Freezout">Freezout</option>
-              <option value="KO">KO</option>
-              <option value="Mystery KO">Mystery KO</option>
-              <option value="Space KO">Space KO</option>
+              <option value="STANDARD">Standard</option>
+              <option value="KNOCKOUT">KO</option>
+              <option value="MYSTERY_KNOCKOUT">Mystery KO</option>
+              <option value="SPACE_KNOCKOUT">Space KO</option>
+              <option value="FREEZOUT">Freezout</option>
+              <option value="SATELLITE">Satellite</option>
             </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-200 mb-1">Date début</label>
-            <input
-              type="date"
-              className="w-full bg-gray-700 text-gray-200 rounded px-3 py-2"
-              value={filters.startDate}
-              onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-200 mb-1">Date fin</label>
-            <input
-              type="date"
-              className="w-full bg-gray-700 text-gray-200 rounded px-3 py-2"
-              value={filters.endDate}
-              onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-            />
           </div>
         </div>
 
@@ -299,16 +352,17 @@ export default function SearchPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {currentTournaments.map((tournament) => (
+              {tournaments.map((tournament) => (
                 <tr key={tournament.id} className="hover:bg-gray-800/50">
                   <td className="px-4 py-3 text-gray-200">{tournament.name}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.room}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.buyIn}€</td>
-                  <td className="px-4 py-3 text-gray-300">{tournament.format}</td>
+                  <td className="px-4 py-3 text-gray-300">{tournament.tableSize}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.variant}</td>
                   <td className="px-4 py-3 text-gray-300">{tournament.type}</td>
                   <td className="px-4 py-3 text-gray-300">
                     {formatTime(tournament.startTime)}
+
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -326,11 +380,19 @@ export default function SearchPage() {
                       </select>
                       <button
                         onClick={() => selectedGrid && handleAddToGrid(tournament.id, selectedGrid)}
-                        disabled={!selectedGrid || loading}
+                        disabled={
+                          !selectedGrid || 
+                          loading || 
+                          Boolean(selectedGrid && addedTournaments[selectedGrid]?.includes(tournament.id))
+                        }
                         className="px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 
                                  text-white rounded-lg text-sm transition-colors"
                       >
-                        {loading ? 'Ajout...' : 'Ajouter'}
+                        {loading ? 'Ajout...' : 
+                          Boolean(selectedGrid && addedTournaments[selectedGrid]?.includes(tournament.id))
+                            ? 'Déjà ajouté' 
+                            : 'Ajouter'
+                        }
                       </button>
                     </div>
                   </td>
